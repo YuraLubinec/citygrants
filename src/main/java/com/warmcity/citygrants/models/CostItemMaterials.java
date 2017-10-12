@@ -8,13 +8,13 @@ import lombok.Data;
 
 @Data
 @Document
-public class CostItemFee implements Serializable {
+public class CostItemMaterials implements Serializable {
 
-  private static final long serialVersionUID = -651088044360183033L;
-  
-  private String title;
-  private int monthAward;
-  private int timeSpent;
+  private static final long serialVersionUID = 4777367484927168570L;
+
+  private String description;
+  private int cost;
+  private int number;
   private int consumptionsFromProgram;
   private int consumptionsFromOtherSources;
   private int totalFromProgram;

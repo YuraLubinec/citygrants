@@ -2,8 +2,7 @@ package com.warmcity.citygrants.dto;
 
 import java.io.Serializable;
 
-import com.warmcity.citygrants.models.Budget;
-import com.warmcity.citygrants.models.Description;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -12,8 +11,11 @@ public class ProjectApplicationDTO implements Serializable {
 
   private static final long serialVersionUID = -8779430168266035635L;
 
-  private Description description;
-  private Budget budget;
+  @NotNull
+  private DescriptionDTO description;
+  @NotNull
+  private BudgetDTO budget;
+  @NotNull
   private boolean confirmed;
 
 }

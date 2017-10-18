@@ -17,7 +17,5 @@ public class CostItemTransport implements Serializable {
   private int numberOfPersons;
   private int consumptionsFromProgram;
   private int consumptionsFromOtherSources;
-  private int totalFromProgram;
-  private int totalFromOtherSources;
   
 }

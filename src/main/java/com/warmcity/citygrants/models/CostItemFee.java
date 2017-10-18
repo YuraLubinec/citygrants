@@ -17,7 +17,5 @@ public class CostItemFee implements Serializable {
   private int timeSpent;
   private int consumptionsFromProgram;
   private int consumptionsFromOtherSources;
-  private int totalFromProgram;
-  private int totalFromOtherSources;
   
 }

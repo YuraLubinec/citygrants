@@ -14,10 +14,8 @@ public class CostItemAdvertising implements Serializable {
   
   private String description;
   private int cost;
-  private int time;
+  private int count;
   private int consumptionsFromProgram;
   private int consumptionsFromOtherSources;
-  private int totalFromProgram;
-  private int totalFromOtherSources;
 
 }

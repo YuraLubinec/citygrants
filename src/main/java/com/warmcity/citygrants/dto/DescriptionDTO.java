@@ -3,6 +3,7 @@ package com.warmcity.citygrants.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -31,6 +32,7 @@ public class DescriptionDTO implements Serializable {
   @NotBlank
   @Size(max=30)
   private String requiredTime;
+  @NotNull
   private List<ProjectMemberDTO> projectMembers;
   @NotBlank
   @Size(max=50)

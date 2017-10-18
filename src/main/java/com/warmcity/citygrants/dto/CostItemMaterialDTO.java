@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Data
 @Document
-public class CostItemMaterialsDTO implements Serializable {
+public class CostItemMaterialDTO implements Serializable {
 
   private static final long serialVersionUID = -6464098776304590873L;
   
@@ -21,11 +21,12 @@ public class CostItemMaterialsDTO implements Serializable {
   private String description;
   @NotBlank
   @Size(max = 7)
-  @Pattern(regexp = "\\d+")private String cost;
+  @Pattern(regexp = "\\d+")
+  private String cost;
   @NotBlank
   @Size(max = 3)
   @Pattern(regexp = "\\d+")
-  private String number;
+  private String count;
   @NotBlank
   @Size(max = 7)
   @Pattern(regexp = "\\d+")
@@ -34,13 +35,4 @@ public class CostItemMaterialsDTO implements Serializable {
   @Size(max = 7)
   @Pattern(regexp = "\\d+")
   private String consumptionsFromOtherSources;
-  @NotBlank
-  @Size(max = 8)
-  @Pattern(regexp = "\\d+")
-  private String totalFromProgram;
-  @NotBlank
-  @Size(max = 8)
-  @Pattern(regexp = "\\d+")
-  private String totalFromOtherSources;
-  
 }

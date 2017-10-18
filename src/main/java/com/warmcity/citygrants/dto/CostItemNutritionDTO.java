@@ -35,13 +35,5 @@ public class CostItemNutritionDTO implements Serializable {
   @Size(max = 5)
   @Pattern(regexp = "\\d+")
   private String consumptionsFromOtherSources;
-  @NotBlank
-  @Size(max = 6)
-  @Pattern(regexp = "\\d+")
-  private String totalFromProgram;
-  @NotBlank
-  @Size(max = 6)
-  @Pattern(regexp = "\\d+")
-  private String totalFromOtherSources;
 
 }

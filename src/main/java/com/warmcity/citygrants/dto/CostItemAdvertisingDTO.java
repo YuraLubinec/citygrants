@@ -26,7 +26,7 @@ public class CostItemAdvertisingDTO implements Serializable {
   @NotBlank
   @Size(max = 4)
   @Pattern(regexp = "\\d+")
-  private String time;
+  private String count;
   @NotBlank
   @Size(max = 7)
   @Pattern(regexp = "\\d+")
@@ -35,13 +35,5 @@ public class CostItemAdvertisingDTO implements Serializable {
   @Size(max = 7)
   @Pattern(regexp = "\\d+")
   private String consumptionsFromOtherSources;
-  @NotBlank
-  @Size(max = 8)
-  @Pattern(regexp = "\\d+")
-  private String totalFromProgram;
-  @NotBlank
-  @Size(max = 8)
-  @Pattern(regexp = "\\d+")
-  private String totalFromOtherSources;
 
 }

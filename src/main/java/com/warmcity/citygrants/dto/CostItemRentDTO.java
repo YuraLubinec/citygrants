@@ -22,7 +22,7 @@ public class CostItemRentDTO implements Serializable {
   @NotBlank
   @Size(max=4)
   @Pattern(regexp="\\d+")
-  private String costForHour;
+  private String costForDay;
   @NotBlank
   @Size(max=4)
   @Pattern(regexp="\\d+")
@@ -35,13 +35,5 @@ public class CostItemRentDTO implements Serializable {
   @Size(max=6)
   @Pattern(regexp="\\d+")
   private String consumptionsFromOtherSources;
-  @NotBlank
-  @Size(max=7)
-  @Pattern(regexp="\\d+")
-  private String totalFromProgram;
-  @NotBlank
-  @Size(max=7)
-  @Pattern(regexp="\\d+")
-  private String totalFromOtherSources;
   
 }

@@ -1,11 +1,9 @@
 package com.warmcity.citygrants.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -14,19 +12,19 @@ public class BudgetDTO implements Serializable {
 
   private static final long serialVersionUID = -2734849621679578962L;
 
-  private CostItemFeeDTO   costItemFee;
-  private CostItemTransportDTO costItemTransport;
-  private CostItemNutritionDTO costItemNutrition;
-  private CostItemRentDTO costItemRent;
-  private CostItemAdministrativeDTO costItemAdministrative;
-  private CostItemAdvertisingDTO costItemAdvertising;
-  @NotBlank
-  @Size(max = 9)
-  @Pattern(regexp = "\\d+")
-  private String totalFromProgram;
-  @NotBlank
-  @Size(max = 9)
-  @Pattern(regexp = "\\d+")
-  private String totalFromOtherSources;
+  @NotNull
+  private List<CostItemFeeDTO> costItemFee;
+  @NotNull
+  private List<CostItemTransportDTO> costItemTransport;
+  @NotNull
+  private List<CostItemNutritionDTO> costItemNutrition;
+  @NotNull
+  private List<CostItemRentDTO> costItemRent;
+  @NotNull
+  private List<CostItemAdministrativeDTO> costItemAdministrative;
+  @NotNull
+  private List<CostItemAdvertisingDTO> costItemAdvertising;
+  @NotNull
+  private List<CostItemMaterialDTO> costItemMaterial;
 
 }

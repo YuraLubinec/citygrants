@@ -1,7 +1,5 @@
 package com.warmcity.citygrants.controllers;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,19 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.warmcity.citygrants.models.Budget;
-import com.warmcity.citygrants.models.Comment;
-import com.warmcity.citygrants.models.CostItemAdministrative;
-import com.warmcity.citygrants.models.CostItemAdvertising;
-import com.warmcity.citygrants.models.CostItemFee;
-import com.warmcity.citygrants.models.CostItemNutrition;
-import com.warmcity.citygrants.models.CostItemRent;
-import com.warmcity.citygrants.models.CostItemTransport;
-import com.warmcity.citygrants.models.Description;
-import com.warmcity.citygrants.models.Evaluation;
-import com.warmcity.citygrants.models.InterviewEvaluation;
 import com.warmcity.citygrants.models.Project;
-import com.warmcity.citygrants.models.ProjectMember;
 import com.warmcity.citygrants.services.ProjectService;
 
 @RestController
@@ -41,10 +27,10 @@ public class ClientPageController {
   @PutMapping("/project")
   public void saveProject() {
     
-    projectService.save(createDummyProject());
+//    projectService.save(createDummyProject());
   }
 
-  private Project createDummyProject() {
+  /*private Project createDummyProject() {
     // description
     List<ProjectMember> projectMembers = new ArrayList<>();
     projectMembers.add(new ProjectMember());
@@ -113,5 +99,5 @@ public class ClientPageController {
     project.setTotalEvalSecondStage(55);
     return project;
   }
-
+*/
 }

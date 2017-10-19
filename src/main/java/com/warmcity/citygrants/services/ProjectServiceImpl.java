@@ -94,15 +94,70 @@ public class ProjectServiceImpl implements ProjectService {
 
     Budget budget = new Budget();
     budget.setCostItemsFee(costItemFeeListBuilder(budgetDTO.getCostItemFee()));
+    budget.setTotalFeeFromProgram(
+        budget.getCostItemsFee().stream().mapToInt(CostItemFee::getConsumptionsFromProgram).sum());
+    budget.setTotalFeeFromOtherSources(
+        budget.getCostItemsFee().stream().mapToInt(CostItemFee::getConsumptionsFromOtherSources).sum());
+
     budget.setCostItemsNutrition(costItemNutritionListBuilder(budgetDTO.getCostItemNutrition()));
+    budget.setTotalNutritionFromProgram(
+        budget.getCostItemsNutrition().stream().mapToInt(CostItemNutrition::getConsumptionsFromProgram).sum());
+    budget.setTotalNutritionFromOtherSources(
+        budget.getCostItemsNutrition().stream().mapToInt(CostItemNutrition::getConsumptionsFromOtherSources).sum());
+
     budget.setCostItemsTransport(costItemTransportListBuilder(budgetDTO.getCostItemTransport()));
+    budget.setTotalTransportFromProgram(
+        budget.getCostItemsTransport().stream().mapToInt(CostItemTransport::getConsumptionsFromProgram).sum());
+    budget.setTotalTransportFromOtherSources(
+        budget.getCostItemsTransport().stream().mapToInt(CostItemTransport::getConsumptionsFromOtherSources).sum());
+
     budget.setCostItemsRent(costItemRentListBuilder(budgetDTO.getCostItemRent()));
+    budget.setTotalRentFromProgram(
+        budget.getCostItemsRent().stream().mapToInt(CostItemRent::getConsumptionsFromProgram).sum());
+    budget.setTotalRentFromOtherSources(
+        budget.getCostItemsRent().stream().mapToInt(CostItemRent::getConsumptionsFromOtherSources).sum());
+
     budget.setCostItemsAdministrative(costItemAdministrativeListBuilder(budgetDTO.getCostItemAdministrative()));
+    budget.setTotalAdministrativeFromProgram(budget.getCostItemsAdministrative().stream()
+        .mapToInt(CostItemAdministrative::getConsumptionsFromProgram).sum());
+    budget.setTotalAdministrativeFromOtherSources(budget.getCostItemsAdministrative().stream()
+        .mapToInt(CostItemAdministrative::getConsumptionsFromOtherSources).sum());
+
     budget.setCostItemsAdvertising(costItemAdvertisingListBuilder(budgetDTO.getCostItemAdvertising()));
+    budget.setTotalAdvertisingFromProgram(
+        budget.getCostItemsAdvertising().stream().mapToInt(CostItemAdvertising::getConsumptionsFromProgram).sum());
+    budget.setTotalAdvertisingFromOtherSources(
+        budget.getCostItemsAdvertising().stream().mapToInt(CostItemAdvertising::getConsumptionsFromOtherSources).sum());
+
     budget.setCostItemsMaterial(costItemMaterialListBuilder(budgetDTO.getCostItemMaterial()));
+    budget.setTotalMaterialsFromProgram(
+        budget.getCostItemsMaterial().stream().mapToInt(CostItemMaterial::getConsumptionsFromProgram).sum());
+    budget.setTotalMaterialsFromOtherSources(
+        budget.getCostItemsMaterial().stream().mapToInt(CostItemMaterial::getConsumptionsFromOtherSources).sum());
+
+    budget.setTotalFromProgram(getTotalFromProgram(budget));
+    budget.setTotalFromOtherSources(getTotalFromOtherSources(budget));
+    
     return budget;
   }
+  
+  private int getTotalFromOtherSources(Budget budget) {
+    
+    return budget.getTotalAdministrativeFromOtherSources() + budget.getTotalAdvertisingFromOtherSources()
+    + budget.getTotalFeeFromOtherSources() + budget.getTotalMaterialsFromOtherSources()
+    + budget.getTotalNutritionFromOtherSources() + budget.getTotalRentFromOtherSources()
+    + budget.getTotalTransportFromOtherSources();
+  }
 
+  private int getTotalFromProgram(Budget budget) {
+    
+    return budget.getTotalAdministrativeFromProgram() + budget.getTotalAdvertisingFromProgram()
+        + budget.getTotalFeeFromProgram() + budget.getTotalMaterialsFromProgram()
+        + budget.getTotalNutritionFromProgram() + budget.getTotalRentFromProgram()
+        + budget.getTotalTransportFromProgram();
+  }
+
+  // project member
   private List<ProjectMember> projecMemberListBuilder(List<ProjectMemberDTO> projectMemberDTOs) {
 
     List<ProjectMember> projectMembers = projectMemberDTOs.stream()

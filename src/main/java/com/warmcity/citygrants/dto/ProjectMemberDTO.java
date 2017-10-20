@@ -16,7 +16,7 @@ public class ProjectMemberDTO implements Serializable {
   private static final long serialVersionUID = -2884170363877647502L;
 
   @NotBlank
-  @Size(min=10, max=12)
+  @Size(min=10, max=13)
   @Pattern(regexp="\\+?\\d+")
   private String phone;
   @NotBlank

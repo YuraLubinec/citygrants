@@ -15,24 +15,24 @@ public class BudgetDTO implements Serializable {
 
   @Valid
   @NotNull
-  private List<CostItemFeeDTO> costItemFee;
+  private List<CostItemDTO> costItemsFee;
   @Valid
   @NotNull
-  private List<CostItemTransportDTO> costItemTransport;
+  private List<CostItemDTO> costItemsTransport;
   @Valid
   @NotNull
-  private List<CostItemNutritionDTO> costItemNutrition;
+  private List<CostItemDTO> costItemsNutrition;
   @Valid
   @NotNull
-  private List<CostItemRentDTO> costItemRent;
+  private List<CostItemDTO> costItemsRent;
   @Valid
   @NotNull
-  private List<CostItemAdministrativeDTO> costItemAdministrative;
+  private List<CostItemDTO> costItemsAdministrative;
   @Valid
   @NotNull
-  private List<CostItemAdvertisingDTO> costItemAdvertising;
+  private List<CostItemDTO> costItemsAdvertising;
   @Valid
   @NotNull
-  private List<CostItemMaterialDTO> costItemMaterial;
+  private List<CostItemDTO> costItemsMaterial;
 
 }

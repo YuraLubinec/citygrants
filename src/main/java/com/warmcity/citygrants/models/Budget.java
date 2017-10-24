@@ -13,25 +13,25 @@ public class Budget implements Serializable {
 
   private static final long serialVersionUID = 8142881569472211875L;
   
-  private List<CostItemFee> costItemsFee;
+  private List<CostItem> costItemsFee;
   private int totalFeeFromProgram;
   private int totalFeeFromOtherSources;
-  private List<CostItemTransport> costItemsTransport;
+  private List<CostItem> costItemsTransport;
   private int totalTransportFromProgram;
   private int totalTransportFromOtherSources;
-  private List<CostItemNutrition> costItemsNutrition;
+  private List<CostItem> costItemsNutrition;
   private int totalNutritionFromProgram;
   private int totalNutritionFromOtherSources;
-  private List<CostItemRent> costItemsRent;
+  private List<CostItem> costItemsRent;
   private int totalRentFromProgram;
   private int totalRentFromOtherSources;
-  private List<CostItemAdministrative> costItemsAdministrative;
+  private List<CostItem> costItemsAdministrative;
   private int totalAdministrativeFromProgram;
   private int totalAdministrativeFromOtherSources;
-  private List<CostItemAdvertising> costItemsAdvertising;
+  private List<CostItem> costItemsAdvertising;
   private int totalAdvertisingFromProgram;
   private int totalAdvertisingFromOtherSources;
-  private List<CostItemMaterial> costItemsMaterial;
+  private List<CostItem> costItemsMaterial;
   private int totalMaterialsFromProgram;
   private int totalMaterialsFromOtherSources;
   private int totalFromProgram;

@@ -14,7 +14,6 @@ import com.warmcity.citygrants.dto.BudgetDTO;
 import com.warmcity.citygrants.dto.CostItemDTO;
 import com.warmcity.citygrants.dto.DescriptionDTO;
 import com.warmcity.citygrants.dto.ProjectApplicationDTO;
-import com.warmcity.citygrants.dto.ProjectMemberDTO;
 import com.warmcity.citygrants.models.Budget;
 import com.warmcity.citygrants.models.Comment;
 import com.warmcity.citygrants.models.CostItem;
@@ -22,7 +21,6 @@ import com.warmcity.citygrants.models.Description;
 import com.warmcity.citygrants.models.Evaluation;
 import com.warmcity.citygrants.models.InterviewEvaluation;
 import com.warmcity.citygrants.models.Project;
-import com.warmcity.citygrants.models.ProjectMember;
 import com.warmcity.citygrants.repositories.ProjectRepository;
 
 @Service
@@ -63,7 +61,10 @@ public class ProjectServiceImpl implements ProjectService {
     description.setOrganizationName(descriptionDTO.getOrganizationName());
     description.setTheme(descriptionDTO.getTheme());
     description.setRequiredTime(descriptionDTO.getRequiredTime());
-    description.setProjectMembers(projecMemberListBuilder(descriptionDTO.getProjectMembers()));
+    description.setCoordinatorName(descriptionDTO.getCoordinatorName());
+    description.setCoordinatorEmail(descriptionDTO.getCoordinatorEmail());
+    description.setCoordinatorPhone(descriptionDTO.getCoordinatorPhone());
+    description.setProjectMembers(descriptionDTO.getProjectMembers());
     description.setExpirienceDescription(descriptionDTO.getExpirienceDescription());
     description.setAddress(descriptionDTO.getAddress());
     description.setWebaddress(descriptionDTO.getWebaddress());
@@ -142,23 +143,6 @@ public class ProjectServiceImpl implements ProjectService {
         + budget.getTotalFeeFromProgram() + budget.getTotalMaterialsFromProgram()
         + budget.getTotalNutritionFromProgram() + budget.getTotalRentFromProgram()
         + budget.getTotalTransportFromProgram();
-  }
-
-  // project member
-  private List<ProjectMember> projecMemberListBuilder(List<ProjectMemberDTO> projectMemberDTOs) {
-
-    List<ProjectMember> projectMembers = projectMemberDTOs.stream()
-        .map(projectMemberDTO -> projectMemberBuilder(projectMemberDTO)).collect(Collectors.toList());
-    return projectMembers;
-  }
-
-  private ProjectMember projectMemberBuilder(ProjectMemberDTO projectMemberDTO) {
-
-    ProjectMember projectMember = new ProjectMember();
-    projectMember.setEmail(projectMemberDTO.getEmail());
-    projectMember.setFullName(projectMemberDTO.getFullName());
-    projectMember.setPhone(projectMemberDTO.getPhone());
-    return projectMember;
   }
 
   private List<CostItem> costItemListBuilder(List<CostItemDTO> costItemDTOs) {

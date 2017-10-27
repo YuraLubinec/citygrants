@@ -2,7 +2,6 @@ package com.warmcity.citygrants.models;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,7 +18,10 @@ public class Description implements Serializable {
   private String organizationName;
   private String theme;
   private String requiredTime;
-  private List<ProjectMember> projectMembers;
+  private String coordinatorName;
+  private String coordinatorPhone;
+  private String coordinatorEmail;
+  private String projectMembers;
   private String expirienceDescription;
   private String address;
   private String webaddress;

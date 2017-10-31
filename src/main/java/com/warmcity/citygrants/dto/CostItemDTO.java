@@ -19,19 +19,17 @@ public class CostItemDTO implements Serializable {
   private String description;
   @NotBlank
   @Size(max = 6)
-  @Pattern(regexp = "\\d+")
   private String cost;
   @NotBlank
   @Size(max = 6)
-  @Pattern(regexp = "\\d+")
   private String count;
   @NotBlank
   @Size(max = 6)
-  @Pattern(regexp = "\\d+")
+  @Pattern(regexp = "[^0]\\d+")
   private String consumptionsFromProgram;
   @NotBlank
   @Size(max = 6)
-  @Pattern(regexp = "\\d+")
+  @Pattern(regexp = "[^0]\\d+")
   private String consumptionsFromOtherSources;
   
 

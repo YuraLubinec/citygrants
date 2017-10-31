@@ -19,8 +19,8 @@ public class DescriptionDTO implements Serializable {
   @Size(max=250)
   private String name;
   @NotBlank
-  @Size(max=20)
-  @Pattern(regexp="\\d+")
+  @Size(max=7)
+  @Pattern(regexp = "[^0]\\d+")
   private String requestedBudget;
   @NotBlank
   @Size(max=250)

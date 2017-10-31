@@ -34,6 +34,9 @@ public class Budget implements Serializable {
   private List<CostItem> costItemsMaterial;
   private int totalMaterialsFromProgram;
   private int totalMaterialsFromOtherSources;
+  private List<CostItem> costItemsOthers;
+  private int totalOthersFromProgram;
+  private int totalOthersFromOtherSources;
   private int totalFromProgram;
   private int totalFromOtherSources;
   

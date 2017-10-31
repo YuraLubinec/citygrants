@@ -110,6 +110,10 @@ public class ProjectServiceImpl implements ProjectService {
     budget.setCostItemsMaterial(costItemListBuilder(budgetDTO.getCostItemsMaterial()));
     budget.setTotalMaterialsFromProgram(getSumFromProgram(budget.getCostItemsMaterial()));
     budget.setTotalMaterialsFromOtherSources(getSumFromOtherSources(budget.getCostItemsMaterial()));
+    
+    budget.setCostItemsOthers(costItemListBuilder(budgetDTO.getCostItemsOthers()));
+    budget.setTotalOthersFromProgram(getSumFromProgram(budget.getCostItemsOthers()));
+    budget.setTotalOthersFromOtherSources(getSumFromOtherSources(budget.getCostItemsOthers()));
 
     budget.setTotalFromProgram(getTotalFromProgram(budget));
     budget.setTotalFromOtherSources(getTotalFromOtherSources(budget));
@@ -134,7 +138,7 @@ public class ProjectServiceImpl implements ProjectService {
     return budget.getTotalAdministrativeFromOtherSources() + budget.getTotalAdvertisingFromOtherSources()
         + budget.getTotalFeeFromOtherSources() + budget.getTotalMaterialsFromOtherSources()
         + budget.getTotalNutritionFromOtherSources() + budget.getTotalRentFromOtherSources()
-        + budget.getTotalTransportFromOtherSources();
+        + budget.getTotalTransportFromOtherSources() + budget.getTotalOthersFromOtherSources();
   }
 
   private int getTotalFromProgram(Budget budget) {
@@ -142,7 +146,7 @@ public class ProjectServiceImpl implements ProjectService {
     return budget.getTotalAdministrativeFromProgram() + budget.getTotalAdvertisingFromProgram()
         + budget.getTotalFeeFromProgram() + budget.getTotalMaterialsFromProgram()
         + budget.getTotalNutritionFromProgram() + budget.getTotalRentFromProgram()
-        + budget.getTotalTransportFromProgram();
+        + budget.getTotalTransportFromProgram() + budget.getTotalOthersFromProgram();
   }
 
   private List<CostItem> costItemListBuilder(List<CostItemDTO> costItemDTOs) {

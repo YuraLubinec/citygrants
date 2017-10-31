@@ -34,5 +34,8 @@ public class BudgetDTO implements Serializable {
   @Valid
   @NotNull
   private List<CostItemDTO> costItemsMaterial;
+  @Valid
+  @NotNull
+  private List<CostItemDTO> costItemsOthers;
 
 }

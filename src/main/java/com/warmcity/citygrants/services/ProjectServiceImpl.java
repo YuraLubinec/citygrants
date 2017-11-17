@@ -9,11 +9,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.warmcity.citygrants.dto.BudgetDTO;
 import com.warmcity.citygrants.dto.CostItemDTO;
 import com.warmcity.citygrants.dto.DescriptionDTO;
 import com.warmcity.citygrants.dto.ProjectApplicationDTO;
+import com.warmcity.citygrants.gridFSDAO.GridFsDAOimpl;
 import com.warmcity.citygrants.models.Budget;
 import com.warmcity.citygrants.models.Comment;
 import com.warmcity.citygrants.models.CostItem;
@@ -23,11 +25,16 @@ import com.warmcity.citygrants.models.InterviewEvaluation;
 import com.warmcity.citygrants.models.Project;
 import com.warmcity.citygrants.repositories.ProjectRepository;
 
+import lombok.SneakyThrows;
+
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
   @Autowired
   private ProjectRepository projectRepository;
+
+  @Autowired
+  private GridFsDAOimpl gridFsDAOimpl;
 
   @Override
   public List<Project> getAll() {
@@ -36,9 +43,33 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
+
   public void save(ProjectApplicationDTO projectDTO) {
 
-    projectRepository.save(projectBuilder(projectDTO));
+    Project project = projectRepository.save(projectBuilder(projectDTO));
+    saveImages(projectDTO.getImages(), project.getId());
+    savePdfDocuments(projectDTO.getPdfDocuments(), project.getId());
+
+  }
+
+  @SneakyThrows
+  private void saveImages(List<MultipartFile> images, String id) {
+    if (images != null && !images.isEmpty()) {
+      for (MultipartFile image : images) {
+        gridFsDAOimpl.saveFile(image.getInputStream(), image.getName(), image.getContentType(), id);
+      }
+    }
+
+  }
+
+  @SneakyThrows
+  private void savePdfDocuments(List<MultipartFile> pdfDocuments, String id) {
+    if (pdfDocuments != null && !pdfDocuments.isEmpty()) {
+      for (MultipartFile pdfDocument : pdfDocuments) {
+        gridFsDAOimpl.saveFile(pdfDocument.getInputStream(), pdfDocument.getName(), pdfDocument.getContentType(), id);
+      }
+    }
+
   }
 
   private Project projectBuilder(ProjectApplicationDTO projectDTO) {
@@ -110,7 +141,7 @@ public class ProjectServiceImpl implements ProjectService {
     budget.setCostItemsMaterial(costItemListBuilder(budgetDTO.getCostItemsMaterial()));
     budget.setTotalMaterialsFromProgram(getSumFromProgram(budget.getCostItemsMaterial()));
     budget.setTotalMaterialsFromOtherSources(getSumFromOtherSources(budget.getCostItemsMaterial()));
-    
+
     budget.setCostItemsOthers(costItemListBuilder(budgetDTO.getCostItemsOthers()));
     budget.setTotalOthersFromProgram(getSumFromProgram(budget.getCostItemsOthers()));
     budget.setTotalOthersFromOtherSources(getSumFromOtherSources(budget.getCostItemsOthers()));

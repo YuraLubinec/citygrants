@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -13,10 +14,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.warmcity.citygrants.dto.AttachmentsDTO;
 import com.warmcity.citygrants.dto.ProjectApplicationDTO;
@@ -50,8 +55,8 @@ public class ClientPageController {
   }
 
   @PostMapping("/project")
-  public ResponseEntity<Map.Entry<String,String>> saveProject(@Validated @RequestBody ProjectApplicationDTO projectApplicationDTO,
-      BindingResult bindingResult) {
+  public ResponseEntity<Map.Entry<String, String>> saveProject(
+      @Validated @RequestBody ProjectApplicationDTO projectApplicationDTO, BindingResult bindingResult) {
 
     if (bindingResult.hasFieldErrors()) {
 
@@ -63,20 +68,19 @@ public class ClientPageController {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     } else {
-      
 
-      Map.Entry<String,String> entry = new AbstractMap.SimpleEntry<String, String>("id",projectService.save(projectApplicationDTO));
+      Map.Entry<String, String> entry = new AbstractMap.SimpleEntry<String, String>("id",
+          projectService.save(projectApplicationDTO));
 
-      return new ResponseEntity<Map.Entry<String,String>>(entry,HttpStatus.OK);
+      return new ResponseEntity<Map.Entry<String, String>>(entry, HttpStatus.OK);
     }
 
   }
 
-  @PostMapping(path = "/project/file", consumes = "multipart/form-data")
-  public void uploadFiles(@Validated @RequestBody AttachmentsDTO attachments) {
+  @PostMapping(path = "/project/file")
+  public void uploadFiles(@ModelAttribute AttachmentsDTO attachmentsDTO) {
 
-    uploadingService.uploadFilesToDb(attachments);
-
+    uploadingService.uploadFilesToDb(attachmentsDTO);
   }
 
 }

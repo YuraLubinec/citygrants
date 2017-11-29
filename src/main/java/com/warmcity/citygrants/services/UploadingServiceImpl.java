@@ -29,7 +29,7 @@ public class UploadingServiceImpl implements UploadingService {
    
     if (images != null && !images.isEmpty()) {
       for (MultipartFile image : images) {
-        gridFsDAOimpl.saveFile(image.getInputStream(), image.getName(), image.getContentType(), id);
+        gridFsDAOimpl.saveFile(image.getInputStream(), image.getOriginalFilename(), image.getContentType(), id);
       }
     }
   }
@@ -39,7 +39,7 @@ public class UploadingServiceImpl implements UploadingService {
     
     if (pdfDocuments != null && !pdfDocuments.isEmpty()) {
       for (MultipartFile pdfDocument : pdfDocuments) {
-        gridFsDAOimpl.saveFile(pdfDocument.getInputStream(), pdfDocument.getName(), pdfDocument.getContentType(), id);
+        gridFsDAOimpl.saveFile(pdfDocument.getInputStream(), pdfDocument.getOriginalFilename(), pdfDocument.getContentType(), id);
       }
     }
   }

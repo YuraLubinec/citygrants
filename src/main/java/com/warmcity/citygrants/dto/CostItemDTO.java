@@ -15,7 +15,7 @@ public class CostItemDTO implements Serializable {
   private static final long serialVersionUID = -1919332474178099202L;
   
   @NotBlank
-  @Size(max = 100)
+  @Size(max = 250)
   private String description;
   @NotBlank
   @Size(max = 6)
@@ -25,11 +25,11 @@ public class CostItemDTO implements Serializable {
   private String count;
   @NotBlank
   @Size(max = 6)
-  @Pattern(regexp = "[^0]\\d+")
+  @Pattern(regexp = "\\d+")
   private String consumptionsFromProgram;
   @NotBlank
   @Size(max = 6)
-  @Pattern(regexp = "[^0]\\d+")
+  @Pattern(regexp = "\\d+")
   private String consumptionsFromOtherSources;
   
 

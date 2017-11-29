@@ -46,7 +46,7 @@ public class DescriptionDTO implements Serializable {
   @Size(max=1000)
   private String projectMembers;
   @NotBlank
-  @Size(max=1000)
+  @Size(max=2000)
   private String expirienceDescription;
   @NotBlank
   @Size(max=250)

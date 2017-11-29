@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EnableMongoRepositories("com.warmcity.citygrants.repositories")
 @PropertySource("classpath:datasource.properties")
-
 public class DbConfiguration{
   
 }

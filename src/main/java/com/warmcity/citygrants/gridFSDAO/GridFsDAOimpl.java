@@ -1,7 +1,6 @@
 package com.warmcity.citygrants.gridFSDAO;
 
 import java.io.InputStream;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -25,9 +24,9 @@ public class GridFsDAOimpl implements GridFsDAO {
   }
 
   @Override
-  public List<GridFSDBFile> find(String project_id, String contentType) {
+  public GridFSDBFile findOneById(String id) {
 
-    return gridFsTemplate.find(new Query(Criteria.where("metadata.project_id").is(project_id).and("contentType").is(contentType)));
+    return gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)));
+
   }
-
 }

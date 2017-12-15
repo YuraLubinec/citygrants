@@ -1,6 +1,7 @@
 package com.warmcity.citygrants.gridFSDAO;
 
 import java.io.InputStream;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -27,6 +28,27 @@ public class GridFsDAOimpl implements GridFsDAO {
   public GridFSDBFile findOneById(String id) {
 
     return gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)));
+
+  }
+
+  @Override
+  public List<GridFSDBFile> findAllByProjectID(String projectId) {
+    
+    return gridFsTemplate.find(new Query(Criteria.where("metadata.project_id").is(projectId)));
+
+  }
+
+  @Override
+  public void deleteAllByProjectId(String id) {
+
+    gridFsTemplate.delete(new Query(Criteria.where("metadata.project_id").is(id)));
+
+  }
+
+  @Override
+  public void deleteOneById(String id) {
+
+    gridFsTemplate.delete(new Query(Criteria.where("_id").is(id)));
 
   }
 }

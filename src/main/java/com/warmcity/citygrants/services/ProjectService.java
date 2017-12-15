@@ -7,8 +7,15 @@ import com.warmcity.citygrants.models.Project;
 
 public interface ProjectService {
 
-  String save(ProjectApplicationDTO projectDTO);
+  String saveProject(ProjectApplicationDTO projectDTO);
 
-  List<Project> getAll();
+  List<Project> getAllProjects();
+
+  Project getProjectById(String id);
+
+  void updateProject(Project project);
+
+  void deleteProject(String id);
+
 
 }

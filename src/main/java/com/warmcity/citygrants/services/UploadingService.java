@@ -1,6 +1,5 @@
 package com.warmcity.citygrants.services;
 
-import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.core.io.Resource;

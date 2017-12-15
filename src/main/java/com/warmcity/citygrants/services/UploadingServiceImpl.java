@@ -1,17 +1,18 @@
 package com.warmcity.citygrants.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mongodb.gridfs.GridFSDBFile;
 import com.warmcity.citygrants.dto.AttachmentsDTO;
 import com.warmcity.citygrants.gridFSDAO.GridFsDAOimpl;
 import com.warmcity.citygrants.models.FileInfo;
-import com.warmcity.citygrants.repositories.FileInfoRepository;
 
 import lombok.SneakyThrows;
 
@@ -20,9 +21,6 @@ public class UploadingServiceImpl implements UploadingService {
 
   @Autowired
   private GridFsDAOimpl gridFsDAOimpl;
-
-  @Autowired
-  private FileInfoRepository infoRepository;
 
   @Override
   public void uploadFilesToDb(AttachmentsDTO attachments) {
@@ -34,13 +32,15 @@ public class UploadingServiceImpl implements UploadingService {
   @Override
   public List<FileInfo> getAllFilesInfoForProject(String projectId) {
 
-    return infoRepository.findByMetadataProjectId(projectId);
+    return gridFsDAOimpl.findAllByProjectID(projectId).stream()
+        .map(file -> new FileInfo(file.getId().toString(), file.getFilename())).collect(Collectors.toList());
   }
 
   @Override
   public Resource getFileById(String id) {
-   
-    return new InputStreamResource(gridFsDAOimpl.findOneById(id).getInputStream());
+
+    GridFSDBFile file = gridFsDAOimpl.findOneById(id);
+    return file != null ? new GridFsResource(file) : null;
   }
 
   @SneakyThrows

@@ -14,6 +14,7 @@ import com.warmcity.citygrants.dto.BudgetDTO;
 import com.warmcity.citygrants.dto.CostItemDTO;
 import com.warmcity.citygrants.dto.DescriptionDTO;
 import com.warmcity.citygrants.dto.ProjectApplicationDTO;
+import com.warmcity.citygrants.gridFSDAO.GridFsDAOimpl;
 import com.warmcity.citygrants.models.Budget;
 import com.warmcity.citygrants.models.Comment;
 import com.warmcity.citygrants.models.CostItem;
@@ -25,21 +26,42 @@ import com.warmcity.citygrants.repositories.ProjectRepository;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
+  
+  @Autowired
+  private GridFsDAOimpl gridFsDAOimpl;
 
   @Autowired
   private ProjectRepository projectRepository;
+  
+  @Override
+  public Project getProjectById(String id) {
+
+    return projectRepository.findOne(id);
+  }
 
   @Override
-  public List<Project> getAll() {
+  public List<Project> getAllProjects() {
 
     return projectRepository.findAll();
   }
 
   @Override
-  public String save(ProjectApplicationDTO projectDTO) {
+  public String saveProject(ProjectApplicationDTO projectDTO) {
 
-    return projectRepository.save(projectBuilder(projectDTO)).getId();
+    return projectRepository.insert(projectBuilder(projectDTO)).getId();
+  }
 
+  @Override
+  public void updateProject(Project project) {
+
+    projectRepository.save(project);
+  }
+  
+  @Override
+  public void deleteProject(String id) {
+    
+    projectRepository.delete(id);
+    gridFsDAOimpl.deleteAllByProjectId(id);
   }
 
   private Project projectBuilder(ProjectApplicationDTO projectDTO) {

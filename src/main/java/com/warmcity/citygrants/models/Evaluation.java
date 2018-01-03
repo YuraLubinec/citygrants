@@ -14,6 +14,13 @@ public class Evaluation implements Serializable {
   
   private String juryMemberId;
   private String juryMemberName;
-  private int evaluation;
+  private int evalActual;
+  private int evalIntelligibility;
+  private int evalCompetence;
+  private int evalStability;
+  private int evalEfficiency;
+  private int evalInnovation;
+  private int evalAttracting;
+  private int evalСooperation;
 
 }

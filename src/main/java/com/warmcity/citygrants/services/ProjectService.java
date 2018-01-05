@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
 import com.warmcity.citygrants.dto.ProjectApplicationDTO;
+import com.warmcity.citygrants.models.Evaluation;
 import com.warmcity.citygrants.models.Project;
 
 public interface ProjectService {
@@ -19,6 +20,8 @@ public interface ProjectService {
   void updateProject(Project project);
 
   void deleteProject(String id);
+
+  void updateEvaluation(String idProject, Evaluation evaluation);
 
 
 }

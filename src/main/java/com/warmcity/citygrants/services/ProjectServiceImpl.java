@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.warmcity.citygrants.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +60,7 @@ public class ProjectServiceImpl implements ProjectService {
 
   private ProjectApplJuryDTO getProjectsForJury(Project project, String juryId){
     ProjectApplJuryDTO projectDTO = new ProjectApplJuryDTO();
-
+    projectDTO.setId(project.getId());
     projectDTO.setDescription(project.getDescription());
     projectDTO.setBudget(project.getBudget());
     projectDTO.setComments(project.getComments());
@@ -68,6 +71,18 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   private Evaluation getEvalutionForJury(List<Evaluation> evaluations, String juryId){
+    System.out.println(evaluations.size());
+   /* if(evaluations.size() != 0) {
+      System.out.println(evaluations.get(0).getJuryMemberId());
+      System.out.println(evaluations.get(0).getJuryMemberName());
+      System.out.println(evaluations.get(0).getEvalСooperation());
+      Optional<Evaluation> evaluation = evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst();
+      return evaluation != null ? evaluation.get(): getDefaultEvalution(juryId);
+      //return getDefaultEvalution(juryId);
+    }else{
+      return getDefaultEvalution(juryId);
+    }*/
+    //return evaluation == null ? evaluation.get(): getDefaultEvalution(juryId);
 
     return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst().orElseGet(()->getDefaultEvalution(juryId));
   }
@@ -86,6 +101,28 @@ public class ProjectServiceImpl implements ProjectService {
   public void updateProject(Project project) {
 
     projectRepository.save(project);
+  }
+
+  @Override
+
+  /*
+  It is temporary method, it need refactoring, probably here need will write query for updating evaluation
+   */
+  public void updateEvaluation(String idProject, Evaluation evaluation) {
+      Project project = getProjectById(idProject);
+      System.out.println(idProject);
+      System.out.println(project == null);
+      int equalId = 0;
+      for (int index = 0; index < project.getEvaluations().size(); index++){
+        if(project.getEvaluations().get(index).getJuryMemberId().equals(evaluation.getJuryMemberId())){
+          project.getEvaluations().set(index, evaluation);
+        }
+      }
+      if(equalId == 0){
+        project.getEvaluations().add(evaluation);
+      }
+
+      updateProject(project);
   }
   
   @Override

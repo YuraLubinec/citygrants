@@ -1,6 +1,7 @@
 package com.warmcity.citygrants.controllers;
 
 import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
+import com.warmcity.citygrants.models.Evaluation;
 import com.warmcity.citygrants.models.Project;
 import com.warmcity.citygrants.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +22,13 @@ public class JuryController {
     public List<ProjectApplJuryDTO> getAllProjects(@PathVariable String juryId) {
         return projectService.getAllJuryProjects(juryId);
     }
+
+    @PostMapping("/project/{projectId}/evaluation")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateEvaluationOfProject(@PathVariable String projectId, Evaluation evaluation) {
+        System.out.println("evaluation putt");
+        projectService.updateEvaluation(projectId, evaluation);
+    }
+
+
 }

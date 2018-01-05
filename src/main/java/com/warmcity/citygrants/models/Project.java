@@ -1,6 +1,7 @@
 package com.warmcity.citygrants.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -25,5 +26,9 @@ public class Project implements Serializable {
   private boolean approvedToSecondStage;
   private int totalEvalFirstStage;
   private int totalEvalSecondStage;
+
+  public List <Evaluation> getEvaluation(){
+    return evaluations == null ? new ArrayList<Evaluation>(): this.evaluations;
+  }
   
 }

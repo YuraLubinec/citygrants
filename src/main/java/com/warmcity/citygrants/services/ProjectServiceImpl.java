@@ -5,15 +5,13 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.warmcity.citygrants.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.warmcity.citygrants.dto.BudgetDTO;
-import com.warmcity.citygrants.dto.CostItemDTO;
-import com.warmcity.citygrants.dto.DescriptionDTO;
-import com.warmcity.citygrants.dto.ProjectApplicationDTO;
 import com.warmcity.citygrants.gridFSDAO.GridFsDAOimpl;
 import com.warmcity.citygrants.models.Budget;
 import com.warmcity.citygrants.models.Comment;
@@ -43,6 +41,39 @@ public class ProjectServiceImpl implements ProjectService {
   public List<Project> getAllProjects() {
 
     return projectRepository.findAll();
+  }
+
+  @Override
+  public List<ProjectApplJuryDTO> getAllJuryProjects(String juryId){
+    List<Project> listProjects = projectRepository.findAll();
+    List<ProjectApplJuryDTO>listProjectJury = new ArrayList<>();
+
+    listProjects.forEach(project -> {
+      listProjectJury.add(getProjectsForJury(project,juryId));
+    });
+
+    return listProjectJury;
+  }
+
+  private ProjectApplJuryDTO getProjectsForJury(Project project, String juryId){
+    ProjectApplJuryDTO projectDTO = new ProjectApplJuryDTO();
+
+    projectDTO.setDescription(project.getDescription());
+    projectDTO.setBudget(project.getBudget());
+    projectDTO.setComments(project.getComments());
+    projectDTO.setConfirmed(project.isConfirmed());
+    projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(),juryId));
+
+    return projectDTO;
+  }
+
+  private Evaluation getEvalutionForJury(List<Evaluation> evaluations, String juryId){
+
+    return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst().orElseGet(()->getDefaultEvalution(juryId));
+  }
+
+  private Evaluation getDefaultEvalution(String juryId){
+    return  new Evaluation(juryId,"",0,0,0,0,0,0,0,0);
   }
 
   @Override

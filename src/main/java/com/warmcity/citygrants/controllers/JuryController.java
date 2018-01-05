@@ -1,13 +1,11 @@
 package com.warmcity.citygrants.controllers;
 
+import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
 import com.warmcity.citygrants.models.Project;
 import com.warmcity.citygrants.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,9 +16,9 @@ public class JuryController {
     @Autowired
     private ProjectService projectService;
 
-    @GetMapping("/project")
+    @GetMapping("/project/{juryId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Project> getAllProjects() {
-        return projectService.getAllProjects();
+    public List<ProjectApplJuryDTO> getAllProjects(@PathVariable String juryId) {
+        return projectService.getAllJuryProjects(juryId);
     }
 }

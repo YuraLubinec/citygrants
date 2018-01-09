@@ -24,7 +24,7 @@ public class Evaluation implements Serializable {
   private int evalEfficiency;
   private int evalInnovation;
   private int evalAttracting;
-  private int evalСooperation;
+  private int evalParticipation;
 
   public String getJuryMemberId(){
     return juryMemberId == null ? "" : this.juryMemberId;

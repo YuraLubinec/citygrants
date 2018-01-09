@@ -25,8 +25,7 @@ public class JuryController {
 
     @PostMapping("/project/{projectId}/evaluation")
     @ResponseStatus(HttpStatus.OK)
-    public void updateEvaluationOfProject(@PathVariable String projectId, Evaluation evaluation) {
-        System.out.println("evaluation putt");
+    public void updateEvaluationOfProject(@PathVariable String projectId, @RequestBody Evaluation evaluation) {
         projectService.updateEvaluation(projectId, evaluation);
     }
 

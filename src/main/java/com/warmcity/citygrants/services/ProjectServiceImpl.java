@@ -71,19 +71,6 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   private Evaluation getEvalutionForJury(List<Evaluation> evaluations, String juryId){
-    System.out.println(evaluations.size());
-   /* if(evaluations.size() != 0) {
-      System.out.println(evaluations.get(0).getJuryMemberId());
-      System.out.println(evaluations.get(0).getJuryMemberName());
-      System.out.println(evaluations.get(0).getEvalСooperation());
-      Optional<Evaluation> evaluation = evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst();
-      return evaluation != null ? evaluation.get(): getDefaultEvalution(juryId);
-      //return getDefaultEvalution(juryId);
-    }else{
-      return getDefaultEvalution(juryId);
-    }*/
-    //return evaluation == null ? evaluation.get(): getDefaultEvalution(juryId);
-
     return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst().orElseGet(()->getDefaultEvalution(juryId));
   }
 
@@ -110,12 +97,13 @@ public class ProjectServiceImpl implements ProjectService {
    */
   public void updateEvaluation(String idProject, Evaluation evaluation) {
       Project project = getProjectById(idProject);
-      System.out.println(idProject);
-      System.out.println(project == null);
+
       int equalId = 0;
       for (int index = 0; index < project.getEvaluations().size(); index++){
         if(project.getEvaluations().get(index).getJuryMemberId().equals(evaluation.getJuryMemberId())){
+          ++equalId;
           project.getEvaluations().set(index, evaluation);
+          break;
         }
       }
       if(equalId == 0){

@@ -2,10 +2,7 @@ package com.warmcity.citygrants.services;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
@@ -111,6 +108,16 @@ public class ProjectServiceImpl implements ProjectService {
       }
 
       updateProject(project);
+  }
+
+  @Override
+  public void saveComment(String idProject, Comment comment){
+    Project project = getProjectById(idProject);
+    List<Comment> comments = project.getComments();
+    comments.add(comment);
+    project.setComments(comments);
+
+    updateProject(project);
   }
   
   @Override

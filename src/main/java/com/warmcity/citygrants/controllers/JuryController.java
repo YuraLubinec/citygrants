@@ -1,6 +1,7 @@
 package com.warmcity.citygrants.controllers;
 
 import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
+import com.warmcity.citygrants.models.Comment;
 import com.warmcity.citygrants.models.Evaluation;
 import com.warmcity.citygrants.models.Project;
 import com.warmcity.citygrants.services.ProjectService;
@@ -27,6 +28,12 @@ public class JuryController {
     @ResponseStatus(HttpStatus.OK)
     public void updateEvaluationOfProject(@PathVariable String projectId, @RequestBody Evaluation evaluation) {
         projectService.updateEvaluation(projectId, evaluation);
+    }
+
+    @PostMapping("/project/{projectId}/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public void saveComment(@PathVariable String projectId, @RequestBody Comment comment) {
+        projectService.saveComment(projectId, comment);
     }
 
 

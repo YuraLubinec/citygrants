@@ -13,7 +13,7 @@ public class Comment implements Serializable {
   private static final long serialVersionUID = 6033746538948239725L;
   
   private String userId;
-  private String username;
+  private String userName;
   private String text;
 
 }

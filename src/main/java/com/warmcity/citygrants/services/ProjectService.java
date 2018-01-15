@@ -24,7 +24,6 @@ public interface ProjectService {
 
   void updateEvaluation(String idProject, Evaluation evaluation);
 
-
   void saveComment(String idProject, Comment comment);
 
 

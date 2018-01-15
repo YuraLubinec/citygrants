@@ -9,17 +9,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.warmcity.citygrants.dto.*;
+import com.warmcity.citygrants.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.warmcity.citygrants.gridFSDAO.GridFsDAOimpl;
-import com.warmcity.citygrants.models.Budget;
-import com.warmcity.citygrants.models.Comment;
-import com.warmcity.citygrants.models.CostItem;
-import com.warmcity.citygrants.models.Description;
-import com.warmcity.citygrants.models.Evaluation;
-import com.warmcity.citygrants.models.InterviewEvaluation;
-import com.warmcity.citygrants.models.Project;
 import com.warmcity.citygrants.repositories.ProjectRepository;
 
 @Service
@@ -30,6 +24,9 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Autowired
   private ProjectRepository projectRepository;
+
+  @Autowired
+  private UploadingService uploadingService;
   
   @Override
   public Project getProjectById(String id) {
@@ -63,6 +60,8 @@ public class ProjectServiceImpl implements ProjectService {
     projectDTO.setComments(project.getComments());
     projectDTO.setConfirmed(project.isConfirmed());
     projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(),juryId));
+    // testing
+    projectDTO.setFilesInfo(uploadingService.getAllFilesInfoForProject(project.getId()));
 
     return projectDTO;
   }

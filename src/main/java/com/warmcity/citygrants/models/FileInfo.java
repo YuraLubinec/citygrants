@@ -2,9 +2,13 @@ package com.warmcity.citygrants.models;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 
 public class FileInfo implements Serializable {
 
@@ -12,14 +16,4 @@ public class FileInfo implements Serializable {
 
   private String id;
   private String filename;
-
-  public FileInfo() {
-  
-  }
-
-  public FileInfo(String id, String filename) {
-    this.id = id;
-    this.filename = filename;
-  }
-
 }

@@ -44,7 +44,6 @@ public class JuryController {
     }
 
     @GetMapping("/project/file/{fileId}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<InputStreamResource> getOneFileById(@PathVariable String fileId){
         GridFSDBFile imageFile = gridFsService.findOneById(fileId);
 

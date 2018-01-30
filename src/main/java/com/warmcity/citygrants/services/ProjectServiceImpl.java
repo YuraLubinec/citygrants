@@ -44,10 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
   public List<ProjectApplJuryDTO> getAllJuryProjects(String juryId){
     List<Project> listProjects = projectRepository.findAll();
     List<ProjectApplJuryDTO>listProjectJury = new ArrayList<>();
-
-    listProjects.forEach(project -> {
-      listProjectJury.add(getProjectsForJury(project,juryId));
-    });
+    listProjects.forEach(project -> { listProjectJury.add(getProjectsForJury(project,juryId));});
 
     return listProjectJury;
   }
@@ -60,7 +57,6 @@ public class ProjectServiceImpl implements ProjectService {
     projectDTO.setComments(project.getComments());
     projectDTO.setConfirmed(project.isConfirmed());
     projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(),juryId));
-    // testing
     projectDTO.setFilesInfo(uploadingService.getAllFilesInfoForProject(project.getId()));
 
     return projectDTO;

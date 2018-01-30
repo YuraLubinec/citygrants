@@ -30,5 +30,19 @@ public class Project implements Serializable {
   public List <Evaluation> getEvaluation(){
     return evaluations == null ? new ArrayList<Evaluation>(): this.evaluations;
   }
-  
+
+  public int getTotalEvalFirstStage() {
+    this.totalEvalFirstStage = 0;
+    getEvaluations().forEach(evaluation -> {
+      this.totalEvalFirstStage += evaluation.getEvalActual();
+      this.totalEvalFirstStage += evaluation.getEvalAttracting();
+      this.totalEvalFirstStage += evaluation.getEvalCompetence();
+      this.totalEvalFirstStage += evaluation.getEvalEfficiency();
+      this.totalEvalFirstStage += evaluation.getEvalInnovation();
+      this.totalEvalFirstStage += evaluation.getEvalIntelligibility();
+      this.totalEvalFirstStage += evaluation.getEvalStability();
+    });
+
+    return this.totalEvalFirstStage;
+  }
 }

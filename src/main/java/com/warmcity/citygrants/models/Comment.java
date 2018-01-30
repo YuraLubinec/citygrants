@@ -1,6 +1,7 @@
 package com.warmcity.citygrants.models;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,5 +16,9 @@ public class Comment implements Serializable {
   private String userId;
   private String userName;
   private String text;
+  private Date date;
 
+  public void setDate() {
+    this.date = new Date();
+  }
 }

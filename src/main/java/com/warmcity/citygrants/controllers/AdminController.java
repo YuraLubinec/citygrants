@@ -64,9 +64,9 @@ public class AdminController {
     userService.saveUser(user);
   }
 
-  @DeleteMapping("/user")
+  @DeleteMapping("/user/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteUser(@RequestBody String id) {
+  public void deleteUser(@PathVariable String id) {
 
     userService.deleteUser(id);
   }
@@ -107,9 +107,9 @@ public class AdminController {
     projectService.updateProject(project);
   }
 
-  @DeleteMapping("/project")
+  @DeleteMapping("/project/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteProject(@RequestBody String id) {
+  public void deleteProject(@PathVariable String id) {
 
     projectService.deleteProject(id);
 

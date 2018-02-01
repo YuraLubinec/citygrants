@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -32,6 +34,7 @@ public class Description implements Serializable {
   private String expectedResults;
   private String requiredPermissions;
   private String partners;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
   private Date date;
 
 }

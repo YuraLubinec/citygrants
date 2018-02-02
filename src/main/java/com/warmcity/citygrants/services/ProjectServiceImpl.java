@@ -2,23 +2,32 @@ package com.warmcity.citygrants.services;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.IntUnaryOperator;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import com.warmcity.citygrants.dto.*;
-import com.warmcity.citygrants.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.warmcity.citygrants.dto.BudgetDTO;
+import com.warmcity.citygrants.dto.CostItemDTO;
+import com.warmcity.citygrants.dto.DescriptionDTO;
+import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
+import com.warmcity.citygrants.dto.ProjectApplicationDTO;
 import com.warmcity.citygrants.gridFSDAO.GridFsDAOimpl;
+import com.warmcity.citygrants.models.Budget;
+import com.warmcity.citygrants.models.Comment;
+import com.warmcity.citygrants.models.CostItem;
+import com.warmcity.citygrants.models.Description;
+import com.warmcity.citygrants.models.Evaluation;
+import com.warmcity.citygrants.models.InterviewEvaluation;
+import com.warmcity.citygrants.models.Project;
 import com.warmcity.citygrants.repositories.ProjectRepository;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
-  
+
   @Autowired
   private GridFsDAOimpl gridFsDAOimpl;
 
@@ -27,7 +36,7 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Autowired
   private UploadingService uploadingService;
-  
+
   @Override
   public Project getProjectById(String id) {
 
@@ -41,33 +50,36 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public List<ProjectApplJuryDTO> getAllJuryProjects(String juryId){
+  public List<ProjectApplJuryDTO> getAllJuryProjects(String juryId) {
     List<Project> listProjects = projectRepository.findAll();
-    List<ProjectApplJuryDTO>listProjectJury = new ArrayList<>();
-    listProjects.forEach(project -> { listProjectJury.add(getProjectsForJury(project,juryId));});
+    List<ProjectApplJuryDTO> listProjectJury = new ArrayList<>();
+    listProjects.forEach(project -> {
+      listProjectJury.add(getProjectsForJury(project, juryId));
+    });
 
     return listProjectJury;
   }
 
-  private ProjectApplJuryDTO getProjectsForJury(Project project, String juryId){
+  private ProjectApplJuryDTO getProjectsForJury(Project project, String juryId) {
     ProjectApplJuryDTO projectDTO = new ProjectApplJuryDTO();
     projectDTO.setId(project.getId());
     projectDTO.setDescription(project.getDescription());
     projectDTO.setBudget(project.getBudget());
     projectDTO.setComments(project.getComments());
     projectDTO.setConfirmed(project.isConfirmed());
-    projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(),juryId));
+    projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(), juryId));
     projectDTO.setFilesInfo(uploadingService.getAllFilesInfoForProject(project.getId()));
 
     return projectDTO;
   }
 
-  private Evaluation getEvalutionForJury(List<Evaluation> evaluations, String juryId){
-    return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst().orElseGet(()->getDefaultEvalution(juryId));
+  private Evaluation getEvalutionForJury(List<Evaluation> evaluations, String juryId) {
+    return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst()
+        .orElseGet(() -> getDefaultEvalution(juryId));
   }
 
-  private Evaluation getDefaultEvalution(String juryId){
-    return  new Evaluation(juryId,"",0,0,0,0,0,0,0,0);
+  private Evaluation getDefaultEvalution(String juryId) {
+    return new Evaluation(juryId, "", 0, 0, 0, 0, 0, 0, 0, 0);
   }
 
   @Override
@@ -85,28 +97,29 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
 
   /*
-  It is temporary method, it need refactoring, probably here need will write query for updating evaluation
+   * It is temporary method, it need refactoring, probably here need will write
+   * query for updating evaluation
    */
   public void updateEvaluation(String idProject, Evaluation evaluation) {
-      Project project = getProjectById(idProject);
+    Project project = getProjectById(idProject);
 
-      int equalId = 0;
-      for (int index = 0; index < project.getEvaluations().size(); index++){
-        if(project.getEvaluations().get(index).getJuryMemberId().equals(evaluation.getJuryMemberId())){
-          ++equalId;
-          project.getEvaluations().set(index, evaluation);
-          break;
-        }
+    int equalId = 0;
+    for (int index = 0; index < project.getEvaluations().size(); index++) {
+      if (project.getEvaluations().get(index).getJuryMemberId().equals(evaluation.getJuryMemberId())) {
+        ++equalId;
+        project.getEvaluations().set(index, evaluation);
+        break;
       }
-      if(equalId == 0){
-        project.getEvaluations().add(evaluation);
-      }
+    }
+    if (equalId == 0) {
+      project.getEvaluations().add(evaluation);
+    }
 
-      updateProject(project);
+    updateProject(project);
   }
 
   @Override
-  public void saveComment(String idProject, Comment comment){
+  public void saveComment(String idProject, Comment comment) {
     Project project = getProjectById(idProject);
     List<Comment> comments = project.getComments();
     comments.add(comment);
@@ -114,10 +127,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     updateProject(project);
   }
-  
+
   @Override
   public void deleteProject(String id) {
-    
+
     projectRepository.delete(id);
     gridFsDAOimpl.deleteAllByProjectId(id);
   }

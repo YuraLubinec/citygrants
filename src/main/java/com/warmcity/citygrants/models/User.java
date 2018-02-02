@@ -9,24 +9,28 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.warmcity.citygrants.enums.Roles;
 
 import lombok.Data;
 
 @Data
-@Document(collection="users")
+@Document(collection = "users")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements Serializable {
 
   private static final long serialVersionUID = 5865568356057566633L;
-  
+
   @Id
   private String id;
-  @Size(min=4, max=15)
+  @NotBlank
+  @Size(min = 4, max = 15)
   private String login;
-  @Size(min=8, max=15)
+  @NotBlank
+  @Size(min = 8, max = 15)
   private String password;
   @NotBlank
-  @Size(max=25)
+  @Size(max = 25)
   private String fullName;
   @NotNull
   private Roles role;

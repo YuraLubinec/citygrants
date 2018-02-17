@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.warmcity.citygrants.services.UploadingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,9 +14,10 @@ import lombok.Data;
 @Data
 @Document(collection="projects")
 public class Project implements Serializable {
-
+  @Autowired
   private static final long serialVersionUID = 5071347014610298630L;
-  
+  private UploadingService uploadingService;
+
   @Id
   private String id;
   private Description description;
@@ -22,6 +25,7 @@ public class Project implements Serializable {
   private List <Evaluation> evaluations;
   private List <InterviewEvaluation> interviewEvaluations;
   private List <Comment> comments;
+  private List<FileInfo> filesInfo;
   private boolean confirmed;
   private boolean approvedToSecondStage;
   private int totalEvalFirstStage;

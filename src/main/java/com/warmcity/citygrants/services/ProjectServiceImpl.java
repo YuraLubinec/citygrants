@@ -3,10 +3,7 @@ package com.warmcity.citygrants.services;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import com.warmcity.citygrants.dto.*;
 import com.warmcity.citygrants.models.*;
@@ -36,13 +33,15 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public List<Project> getAllProjects() {
+    List<Project> projects = projectRepository.findAll();
+    projects.forEach(project -> project.setFilesInfo(uploadingService.getAllFilesInfoForProject(project.getId())));
 
-    return projectRepository.findAll();
+    return projects;
   }
 
   @Override
   public List<ProjectApplJuryDTO> getAllJuryProjects(String juryId){
-    List<Project> listProjects = projectRepository.findAll();
+    List<Project> listProjects = getAllProjects();
     List<ProjectApplJuryDTO>listProjectJury = new ArrayList<>();
     listProjects.forEach(project -> { listProjectJury.add(getProjectsForJury(project,juryId));});
 
@@ -57,7 +56,7 @@ public class ProjectServiceImpl implements ProjectService {
     projectDTO.setComments(project.getComments());
     projectDTO.setConfirmed(project.isConfirmed());
     projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(),juryId));
-    projectDTO.setFilesInfo(uploadingService.getAllFilesInfoForProject(project.getId()));
+    projectDTO.setFilesInfo(project.getFilesInfo());
 
     return projectDTO;
   }

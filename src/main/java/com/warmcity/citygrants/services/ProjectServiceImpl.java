@@ -121,6 +121,18 @@ public class ProjectServiceImpl implements ProjectService {
     gridFsDAOimpl.deleteAllByProjectId(id);
   }
 
+  @Override
+  public void deleteCommentOfProject(String idProject, String idComment){
+    Project project = getProjectById(idProject);
+    List<Comment> comments = project.getComments();
+    comments.stream()
+            .filter(comment -> comment.getId().equals(idComment))
+            .findFirst()
+            .ifPresent(comment -> {comments.remove(comment);});
+
+    updateProject(project);
+  }
+
   private Project projectBuilder(ProjectApplicationDTO projectDTO) {
 
     Project project = new Project();

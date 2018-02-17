@@ -22,6 +22,8 @@ public interface ProjectService {
 
   void deleteProject(String id);
 
+  void deleteCommentOfProject(String idProject, String idComment);
+
   void updateEvaluation(String idProject, Evaluation evaluation);
 
   void saveComment(String idProject, Comment comment);

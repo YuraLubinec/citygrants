@@ -129,6 +129,12 @@ public class AdminController {
     projectService.saveComment(projectId, comment);
   }
 
+  @DeleteMapping("/project/{projectId}/comment/{commentId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteComment(@PathVariable String projectId, @PathVariable String commentId) {
+    projectService.deleteCommentOfProject(projectId, commentId);
+  }
+
   @GetMapping("/project/files/{fileId}")
   public ResponseEntity<InputStreamResource> getOneFileById(@PathVariable String fileId){
     GridFSDBFile imageFile = gridFsService.findOneById(fileId);

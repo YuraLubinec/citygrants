@@ -5,7 +5,6 @@ import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
 import com.warmcity.citygrants.gridFSDAO.GridFsDAO;
 import com.warmcity.citygrants.models.Comment;
 import com.warmcity.citygrants.models.Evaluation;
-import com.warmcity.citygrants.models.Project;
 import com.warmcity.citygrants.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;

@@ -2,10 +2,15 @@ package com.warmcity.citygrants.controllers;
 
 import java.util.List;
 
+import com.mongodb.gridfs.GridFSDBFile;
+import com.warmcity.citygrants.gridFSDAO.GridFsDAO;
+import com.warmcity.citygrants.models.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
@@ -39,6 +44,9 @@ public class AdminController {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private GridFsDAO gridFsService;
 
   @GetMapping("/user/{login}")
   public UserDTO getUser(@PathVariable String login) {
@@ -113,6 +121,21 @@ public class AdminController {
 
     projectService.deleteProject(id);
 
+  }
+
+  @PostMapping("/project/{projectId}/comment")
+  @ResponseStatus(HttpStatus.OK)
+  public void saveComment(@PathVariable String projectId, @RequestBody Comment comment) {
+    projectService.saveComment(projectId, comment);
+  }
+
+  @GetMapping("/project/files/{fileId}")
+  public ResponseEntity<InputStreamResource> getOneFileById(@PathVariable String fileId){
+    GridFSDBFile imageFile = gridFsService.findOneById(fileId);
+
+    return ResponseEntity.ok()
+            .contentType(MediaType.valueOf(imageFile.getContentType()))
+            .body(new InputStreamResource(imageFile.getInputStream()));
   }
 
 }

@@ -111,9 +111,6 @@ public class AdminController {
 
   @PutMapping("/project")
   public void updateProject(@RequestBody Project project) {
-
-    System.out.println(project);
-
     projectService.updateProject(project);
   }
 

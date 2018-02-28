@@ -53,22 +53,4 @@ public class Project implements Serializable {
 
     return this.totalEvalFirstStage;
   }
-
-  @Override
-  public String toString() {
-    return "Project{" +
-            "uploadingService=" + uploadingService +
-            ", id='" + id + '\'' +
-            ", description=" + description +
-            ", budget=" + budget +
-            ", evaluations=" + evaluations +
-            ", interviewEvaluations=" + interviewEvaluations +
-            ", comments=" + comments +
-            ", filesInfo=" + filesInfo +
-            ", confirmed=" + confirmed +
-            ", approvedToSecondStage=" + approvedToSecondStage +
-            ", totalEvalFirstStage=" + totalEvalFirstStage +
-            ", totalEvalSecondStage=" + totalEvalSecondStage +
-            '}';
-  }
 }

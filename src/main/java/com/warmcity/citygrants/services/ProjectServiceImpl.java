@@ -56,7 +56,9 @@ public class ProjectServiceImpl implements ProjectService {
     projectDTO.setComments(project.getComments());
     projectDTO.setConfirmed(project.isConfirmed());
     projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(),juryId));
+    projectDTO.setInterviewEvaluation(getInterviewEvalutionForJury(project.getInterviewEvaluations(),juryId));
     projectDTO.setFilesInfo(project.getFilesInfo());
+    projectDTO.setApprovedToSecondStage(project.isApprovedToSecondStage());
 
     return projectDTO;
   }
@@ -65,8 +67,17 @@ public class ProjectServiceImpl implements ProjectService {
     return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst().orElseGet(()->getDefaultEvalution(juryId));
   }
 
+  private InterviewEvaluation getInterviewEvalutionForJury(List<InterviewEvaluation> evaluations, String juryId){
+    return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst().orElseGet(()->getDefaultInterviewEvalution(juryId));
+  }
+
   private Evaluation getDefaultEvalution(String juryId){
+
     return  new Evaluation(juryId,"",0,0,0,0,0,0,0,0);
+  }
+  private InterviewEvaluation getDefaultInterviewEvalution(String juryId){
+
+    return  new InterviewEvaluation(juryId,"",0);
   }
 
   @Override
@@ -102,6 +113,25 @@ public class ProjectServiceImpl implements ProjectService {
       }
 
       updateProject(project);
+  }
+
+  @Override
+  public void updateInterviewEvaluation(String idProject, InterviewEvaluation evaluation){
+    Project project = getProjectById(idProject);
+
+    int equalId = 0;
+    for (int index = 0; index < project.getInterviewEvaluations().size(); index++){
+      if(project.getInterviewEvaluations().get(index).getJuryMemberId().equals(evaluation.getJuryMemberId())){
+        ++equalId;
+        project.getInterviewEvaluations().set(index, evaluation);
+        break;
+      }
+    }
+    if(equalId == 0){
+      project.getInterviewEvaluations().add(evaluation);
+    }
+
+    updateProject(project);
   }
 
   @Override

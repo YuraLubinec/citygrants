@@ -6,6 +6,7 @@ import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
 import com.warmcity.citygrants.dto.ProjectApplicationDTO;
 import com.warmcity.citygrants.models.Comment;
 import com.warmcity.citygrants.models.Evaluation;
+import com.warmcity.citygrants.models.InterviewEvaluation;
 import com.warmcity.citygrants.models.Project;
 
 public interface ProjectService {
@@ -25,6 +26,8 @@ public interface ProjectService {
   void deleteCommentOfProject(String idProject, String idComment);
 
   void updateEvaluation(String idProject, Evaluation evaluation);
+
+  void updateInterviewEvaluation(String idProject, InterviewEvaluation evaluation);
 
   void saveComment(String idProject, Comment comment);
 

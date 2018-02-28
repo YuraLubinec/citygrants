@@ -5,6 +5,7 @@ import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
 import com.warmcity.citygrants.gridFSDAO.GridFsDAO;
 import com.warmcity.citygrants.models.Comment;
 import com.warmcity.citygrants.models.Evaluation;
+import com.warmcity.citygrants.models.InterviewEvaluation;
 import com.warmcity.citygrants.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -34,6 +35,13 @@ public class JuryController {
     @ResponseStatus(HttpStatus.OK)
     public void updateEvaluationOfProject(@PathVariable String projectId, @RequestBody Evaluation evaluation) {
         projectService.updateEvaluation(projectId, evaluation);
+    }
+
+    @PostMapping("/project/{projectId}/interviewEvaluation")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateInterviewEvaluationOfProject(@PathVariable String projectId, @RequestBody InterviewEvaluation evaluation) {
+        System.out.println("controller is working");
+        projectService.updateInterviewEvaluation(projectId, evaluation);
     }
 
     @PostMapping("/project/{projectId}/comment")

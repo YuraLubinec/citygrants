@@ -36,8 +36,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    System.out.println(bCryptPasswordEncoder().encode("1234"));
 
-    auth.userDetailsService(dtlsService);
+    auth.userDetailsService(dtlsService).passwordEncoder(bCryptPasswordEncoder());
   }
 
   @Override

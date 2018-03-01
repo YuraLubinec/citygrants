@@ -5,17 +5,27 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.warmcity.citygrants.dto.*;
-import com.warmcity.citygrants.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.warmcity.citygrants.dto.BudgetDTO;
+import com.warmcity.citygrants.dto.CostItemDTO;
+import com.warmcity.citygrants.dto.DescriptionDTO;
+import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
+import com.warmcity.citygrants.dto.ProjectApplicationDTO;
 import com.warmcity.citygrants.gridFSDAO.GridFsDAOimpl;
+import com.warmcity.citygrants.models.Budget;
+import com.warmcity.citygrants.models.Comment;
+import com.warmcity.citygrants.models.CostItem;
+import com.warmcity.citygrants.models.Description;
+import com.warmcity.citygrants.models.Evaluation;
+import com.warmcity.citygrants.models.InterviewEvaluation;
+import com.warmcity.citygrants.models.Project;
 import com.warmcity.citygrants.repositories.ProjectRepository;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
-  
+
   @Autowired
   private GridFsDAOimpl gridFsDAOimpl;
 
@@ -24,7 +34,7 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Autowired
   private UploadingService uploadingService;
-  
+
   @Override
   public Project getProjectById(String id) {
 
@@ -48,7 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
     return listProjectJury;
   }
 
-  private ProjectApplJuryDTO getProjectsForJury(Project project, String juryId){
+  private ProjectApplJuryDTO getProjectsForJury(Project project, String juryId) {
     ProjectApplJuryDTO projectDTO = new ProjectApplJuryDTO();
     projectDTO.setId(project.getId());
     projectDTO.setDescription(project.getDescription());
@@ -63,8 +73,9 @@ public class ProjectServiceImpl implements ProjectService {
     return projectDTO;
   }
 
-  private Evaluation getEvalutionForJury(List<Evaluation> evaluations, String juryId){
-    return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst().orElseGet(()->getDefaultEvalution(juryId));
+  private Evaluation getEvalutionForJury(List<Evaluation> evaluations, String juryId) {
+    return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst()
+        .orElseGet(() -> getDefaultEvalution(juryId));
   }
 
   private InterviewEvaluation getInterviewEvalutionForJury(List<InterviewEvaluation> evaluations, String juryId){
@@ -95,24 +106,25 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
 
   /*
-  It is temporary method, it need refactoring, probably here need will write query for updating evaluation
+   * It is temporary method, it need refactoring, probably here need will write
+   * query for updating evaluation
    */
   public void updateEvaluation(String idProject, Evaluation evaluation) {
-      Project project = getProjectById(idProject);
+    Project project = getProjectById(idProject);
 
-      int equalId = 0;
-      for (int index = 0; index < project.getEvaluations().size(); index++){
-        if(project.getEvaluations().get(index).getJuryMemberId().equals(evaluation.getJuryMemberId())){
-          ++equalId;
-          project.getEvaluations().set(index, evaluation);
-          break;
-        }
+    int equalId = 0;
+    for (int index = 0; index < project.getEvaluations().size(); index++) {
+      if (project.getEvaluations().get(index).getJuryMemberId().equals(evaluation.getJuryMemberId())) {
+        ++equalId;
+        project.getEvaluations().set(index, evaluation);
+        break;
       }
-      if(equalId == 0){
-        project.getEvaluations().add(evaluation);
-      }
+    }
+    if (equalId == 0) {
+      project.getEvaluations().add(evaluation);
+    }
 
-      updateProject(project);
+    updateProject(project);
   }
 
   @Override
@@ -143,10 +155,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     updateProject(project);
   }
-  
+
   @Override
   public void deleteProject(String id) {
-    
+
     projectRepository.delete(id);
     gridFsDAOimpl.deleteAllByProjectId(id);
   }

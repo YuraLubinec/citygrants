@@ -2,7 +2,7 @@ package com.warmcity.citygrants.configuration.securityFilters;
 
 import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.AUTHORITY;
 import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.EXPIRATION_TIME;
-import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.HEADER_STRING;
+import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.HEADER_AUTH;
 import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.SECRET;
 import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.TOKEN_PREFIX;
 
@@ -31,6 +31,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   private static final int FIRST = 0;
   private static final String PASSWORD = "password";
   private static final String LOGIN = "login";
+  public static final String ACCESS_CONTROL_EXPOSE_HEADERS = "Access-Control-Expose-Headers";
+
   private AuthenticationManager authenticationManager;
 
   public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -50,7 +52,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
       Authentication auth) throws IOException, ServletException {
 
-    res.addHeader(HEADER_STRING, TOKEN_PREFIX + prepareToken(auth));
+    res.addHeader(HEADER_AUTH, TOKEN_PREFIX + prepareToken(auth));
+    res.addHeader(ACCESS_CONTROL_EXPOSE_HEADERS, HEADER_AUTH);
+  }
+
+  @Override
+  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+      AuthenticationException failed) throws IOException, ServletException {
+
+    response.setStatus(HttpServletResponse.SC_OK);
   }
 
   private String prepareToken(Authentication auth) {

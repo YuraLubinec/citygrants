@@ -1,7 +1,8 @@
 package com.warmcity.citygrants.configuration.securityFilters;
 
 import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.AUTHORITY;
-import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.HEADER_STRING;
+import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.HEADER_AUTH;
+import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.SECRET;
 import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.TOKEN_PREFIX;
 
 import java.io.IOException;
@@ -13,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,9 +25,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+
   
-  @Value("${secret}")
-  private String secret;
 
   public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
 
@@ -38,8 +37,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
       throws IOException, ServletException {
 
-    String header = request.getHeader(HEADER_STRING);
-    
+    String header = request.getHeader(HEADER_AUTH);
     if (header == null || !header.startsWith(TOKEN_PREFIX)) {
       chain.doFilter(request, response);
       return;
@@ -50,12 +48,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
   }
 
   private UsernamePasswordAuthenticationToken getAuthenticationToken(String header) {
-    Claims claims = Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(header.replace(TOKEN_PREFIX, ""))
+    
+    Claims claims = Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(header.replace(TOKEN_PREFIX, ""))
         .getBody();
     String login = claims.getSubject();
-    String grantedAuthority = claims.get(AUTHORITY, String.class);
     List<GrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority(grantedAuthority));
+    authorities.add(new SimpleGrantedAuthority(claims.get(AUTHORITY, String.class)));
     return login != null ? new UsernamePasswordAuthenticationToken(login, null, authorities) : null;
 
   }

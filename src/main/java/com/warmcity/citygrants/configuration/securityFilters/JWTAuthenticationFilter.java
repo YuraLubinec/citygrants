@@ -54,6 +54,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     res.addHeader(HEADER_AUTH, TOKEN_PREFIX + prepareToken(auth));
     res.addHeader(ACCESS_CONTROL_EXPOSE_HEADERS, HEADER_AUTH);
+    res.setStatus(HttpServletResponse.SC_NO_CONTENT);
   }
 
   @Override

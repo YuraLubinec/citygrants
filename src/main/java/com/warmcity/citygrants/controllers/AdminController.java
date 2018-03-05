@@ -110,6 +110,7 @@ public class AdminController {
   }
 
   @PutMapping("/project")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateProject(@RequestBody Project project) {
     projectService.updateProject(project);
   }
@@ -123,7 +124,7 @@ public class AdminController {
   }
 
   @PostMapping("/project/{projectId}/comment")
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void saveComment(@PathVariable String projectId, @RequestBody Comment comment) {
     projectService.saveComment(projectId, comment);
   }

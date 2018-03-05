@@ -39,20 +39,20 @@ public class JuryController {
   }
 
   @PostMapping("/project/{projectId}/evaluation")
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateEvaluationOfProject(@PathVariable String projectId, @RequestBody Evaluation evaluation) {
     projectService.updateEvaluation(projectId, evaluation);
   }
 
     @PostMapping("/project/{projectId}/interviewEvaluation")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateInterviewEvaluationOfProject(@PathVariable String projectId, @RequestBody InterviewEvaluation evaluation) {
         System.out.println("controller is working");
         projectService.updateInterviewEvaluation(projectId, evaluation);
     }
 
     @PostMapping("/project/{projectId}/comment")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void saveComment(@PathVariable String projectId, @RequestBody Comment comment) {
         projectService.saveComment(projectId, comment);
     }

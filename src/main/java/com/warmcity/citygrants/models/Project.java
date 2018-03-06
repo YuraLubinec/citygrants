@@ -34,6 +34,10 @@ public class Project implements Serializable {
     return evaluations == null ? new ArrayList<Evaluation>(): this.evaluations;
   }
 
+  public List <InterviewEvaluation> getInterviewEvaluation(){
+    return evaluations == null ? new ArrayList<InterviewEvaluation>(): this.interviewEvaluations;
+  }
+
   public List <Comment> getComments(){
     return this.comments == null ? new ArrayList<Comment>(): this.comments;
   }
@@ -52,5 +56,12 @@ public class Project implements Serializable {
     });
 
     return this.totalEvalFirstStage;
+  }
+
+  public int getTotalEvalSecondStage() {
+    this.totalEvalSecondStage = 0;
+    getInterviewEvaluation().forEach(evaluation -> { this.totalEvalSecondStage += evaluation.getEvaluation();});
+
+    return this.totalEvalSecondStage;
   }
 }

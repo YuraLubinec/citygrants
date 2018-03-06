@@ -22,11 +22,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
-
-  
 
   public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
 
@@ -48,12 +47,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
   }
 
   private UsernamePasswordAuthenticationToken getAuthenticationToken(String header) {
-    
-    Claims claims = Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(header.replace(TOKEN_PREFIX, ""))
-        .getBody();
-    String login = claims.getSubject();
+
+    String login = null;
     List<GrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority(claims.get(AUTHORITY, String.class)));
+    try {
+      Claims claims = Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(header.replace(TOKEN_PREFIX, ""))
+          .getBody();
+      authorities.add(new SimpleGrantedAuthority(claims.get(AUTHORITY, String.class)));
+      login = claims.getSubject();
+    } catch (ExpiredJwtException e) {
+    }
     return login != null ? new UsernamePasswordAuthenticationToken(login, null, authorities) : null;
 
   }

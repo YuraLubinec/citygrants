@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartException;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -52,10 +53,9 @@ public class GeneralController {
 
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED, reason = METHODNOTALLOWED)
-  public void errorMethodNotSupported(Exception e) {
+  public void errorMethodNotSupported(HttpRequestMethodNotSupportedException e) {
 
-    log.error("Method isn`t supported", e);
-    throw new RuntimeException();
+    log.error(e.getLocalizedMessage());
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)

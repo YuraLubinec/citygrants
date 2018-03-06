@@ -63,7 +63,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     response.setStatus(HttpServletResponse.SC_OK);
   }
-
+  
   private String prepareToken(Authentication auth) {
 
     Claims claims = Jwts.claims()

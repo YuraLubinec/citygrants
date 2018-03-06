@@ -118,10 +118,12 @@ public class ProjectServiceImpl implements ProjectService {
    */
   public void updateEvaluation(String idProject, Evaluation evaluation) {
     Project project = getProjectById(idProject);
+    UserDTO userDTO = userService.getUserByLogin(evaluation.getJuryMemberName());
+    evaluation.setJuryMemberId(userDTO.getId());
 
     int equalId = 0;
     for (int index = 0; index < project.getEvaluations().size(); index++) {
-      if (project.getEvaluations().get(index).getJuryMemberId().equals(evaluation.getJuryMemberId())) {
+      if (project.getEvaluations().get(index).getJuryMemberName().equals(evaluation.getJuryMemberName())) {
         ++equalId;
         project.getEvaluations().set(index, evaluation);
         break;
@@ -137,18 +139,28 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public void updateInterviewEvaluation(String idProject, InterviewEvaluation evaluation){
     Project project = getProjectById(idProject);
+    UserDTO userDTO = userService.getUserByLogin(evaluation.getJuryMemberName());
+    evaluation.setJuryMemberId(userDTO.getId());
 
-    int equalId = 0;
+    int equalName = 0;
     for (int index = 0; index < project.getInterviewEvaluations().size(); index++){
-      if(project.getInterviewEvaluations().get(index).getJuryMemberId().equals(evaluation.getJuryMemberId())){
-        ++equalId;
+      if(project.getInterviewEvaluations().get(index).getJuryMemberName().equals(evaluation.getJuryMemberName())){
+        ++equalName;
         project.getInterviewEvaluations().set(index, evaluation);
         break;
       }
     }
-    if(equalId == 0){
+    if(equalName == 0){
       project.getInterviewEvaluations().add(evaluation);
     }
+
+    updateProject(project);
+  }
+
+  @Override
+  public void updateApprovedToSecondStage(String idProject, Boolean isApproved) {
+    Project project = getProjectById(idProject);
+    project.setApprovedToSecondStage(isApproved);
 
     updateProject(project);
   }

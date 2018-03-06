@@ -1,7 +1,8 @@
 package com.warmcity.citygrants.configuration;
 
-import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.SIGN_UP_URL;
-
+import com.warmcity.citygrants.configuration.securityFilters.JWTAuthenticationFilter;
+import com.warmcity.citygrants.configuration.securityFilters.JWTAuthorizationFilter;
+import com.warmcity.citygrants.services.userDetails.UserDtlsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.warmcity.citygrants.configuration.securityFilters.JWTAuthenticationFilter;
-import com.warmcity.citygrants.configuration.securityFilters.JWTAuthorizationFilter;
-import com.warmcity.citygrants.services.userDetails.UserDtlsService;
+import static com.warmcity.citygrants.configuration.securityFilters.SecurityConstants.SIGN_UP_URL;
 
 @Configuration
 @EnableWebSecurity
@@ -36,7 +35,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
     auth.userDetailsService(dtlsService).passwordEncoder(bCryptPasswordEncoder());
   }
 

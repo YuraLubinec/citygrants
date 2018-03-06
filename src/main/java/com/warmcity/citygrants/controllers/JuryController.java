@@ -32,10 +32,10 @@ public class JuryController {
   @Autowired
   private GridFsDAO gridFsService;
 
-  @GetMapping("/project/{juryId}")
+  @GetMapping("/project/{juryLogin}")
   @ResponseStatus(HttpStatus.OK)
-  public List<ProjectApplJuryDTO> getAllProjects(@PathVariable String juryId) {
-    return projectService.getAllJuryProjects(juryId);
+  public List<ProjectApplJuryDTO> getAllProjects(@PathVariable String juryLogin) {
+    return projectService.getAllJuryProjects(juryLogin);
   }
 
   @PostMapping("/project/{projectId}/evaluation")
@@ -47,7 +47,6 @@ public class JuryController {
     @PostMapping("/project/{projectId}/interviewEvaluation")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateInterviewEvaluationOfProject(@PathVariable String projectId, @RequestBody InterviewEvaluation evaluation) {
-        System.out.println("controller is working");
         projectService.updateInterviewEvaluation(projectId, evaluation);
     }
 

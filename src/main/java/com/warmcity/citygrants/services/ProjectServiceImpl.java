@@ -1,18 +1,11 @@
 package com.warmcity.citygrants.services;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.warmcity.citygrants.dto.BudgetDTO;
 import com.warmcity.citygrants.dto.CostItemDTO;
 import com.warmcity.citygrants.dto.DescriptionDTO;
 import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
 import com.warmcity.citygrants.dto.ProjectApplicationDTO;
+import com.warmcity.citygrants.dto.UserDTO;
 import com.warmcity.citygrants.gridFSDAO.GridFsDAOimpl;
 import com.warmcity.citygrants.models.Budget;
 import com.warmcity.citygrants.models.Comment;
@@ -22,6 +15,15 @@ import com.warmcity.citygrants.models.Evaluation;
 import com.warmcity.citygrants.models.InterviewEvaluation;
 import com.warmcity.citygrants.models.Project;
 import com.warmcity.citygrants.repositories.ProjectRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -34,6 +36,9 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Autowired
   private UploadingService uploadingService;
+
+  @Autowired
+  private UserService userService;
 
   @Override
   public Project getProjectById(String id) {
@@ -50,45 +55,48 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public List<ProjectApplJuryDTO> getAllJuryProjects(String juryId){
+  public List<ProjectApplJuryDTO> getAllJuryProjects(String juryLogin){
     List<Project> listProjects = getAllProjects();
     List<ProjectApplJuryDTO>listProjectJury = new ArrayList<>();
-    listProjects.forEach(project -> { listProjectJury.add(getProjectsForJury(project,juryId));});
+    listProjects.forEach(project -> { listProjectJury.add(getProjectsForJury(project,juryLogin));});
 
     return listProjectJury;
   }
 
-  private ProjectApplJuryDTO getProjectsForJury(Project project, String juryId) {
+  private ProjectApplJuryDTO getProjectsForJury(Project project, String juryLogin) {
     ProjectApplJuryDTO projectDTO = new ProjectApplJuryDTO();
     projectDTO.setId(project.getId());
     projectDTO.setDescription(project.getDescription());
     projectDTO.setBudget(project.getBudget());
     projectDTO.setComments(project.getComments());
     projectDTO.setConfirmed(project.isConfirmed());
-    projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(),juryId));
-    projectDTO.setInterviewEvaluation(getInterviewEvalutionForJury(project.getInterviewEvaluations(),juryId));
+    projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(),juryLogin));
+    projectDTO.setInterviewEvaluation(getInterviewEvalutionForJury(project.getInterviewEvaluations(),juryLogin));
     projectDTO.setFilesInfo(project.getFilesInfo());
     projectDTO.setApprovedToSecondStage(project.isApprovedToSecondStage());
 
     return projectDTO;
   }
 
-  private Evaluation getEvalutionForJury(List<Evaluation> evaluations, String juryId) {
-    return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst()
-        .orElseGet(() -> getDefaultEvalution(juryId));
+  private Evaluation getEvalutionForJury(List<Evaluation> evaluations, String juryLogin) {
+    return evaluations.stream().filter(eval -> eval.getJuryMemberName().equals(juryLogin)).findFirst()
+        .orElseGet(() -> getDefaultEvalution(juryLogin));
   }
 
-  private InterviewEvaluation getInterviewEvalutionForJury(List<InterviewEvaluation> evaluations, String juryId){
-    return evaluations.stream().filter(eval -> eval.getJuryMemberId().equals(juryId)).findFirst().orElseGet(()->getDefaultInterviewEvalution(juryId));
+  private InterviewEvaluation getInterviewEvalutionForJury(List<InterviewEvaluation> evaluations, String juryLogin){
+    return evaluations.stream().filter(eval -> eval.getJuryMemberName().equals(juryLogin)).findFirst().orElseGet(()->getDefaultInterviewEvalution(juryLogin));
   }
 
-  private Evaluation getDefaultEvalution(String juryId){
+  private Evaluation getDefaultEvalution(String juryLogin){
 
-    return  new Evaluation(juryId,"",0,0,0,0,0,0,0,0);
+    UserDTO user = userService.getUserByLogin(juryLogin);
+
+    return  new Evaluation(user.getId(),juryLogin,0,0,0,0,0,0,0,0);
   }
-  private InterviewEvaluation getDefaultInterviewEvalution(String juryId){
+  private InterviewEvaluation getDefaultInterviewEvalution(String juryLogin){
+    UserDTO user = userService.getUserByLogin(juryLogin);
 
-    return  new InterviewEvaluation(juryId,"",0);
+    return  new InterviewEvaluation(user.getId(),juryLogin,0);
   }
 
   @Override
@@ -106,8 +114,7 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
 
   /*
-   * It is temporary method, it need refactoring, probably here need will write
-   * query for updating evaluation
+   * TODO It is temporary method, it need refactoring, probably here need will write query for updating evaluation
    */
   public void updateEvaluation(String idProject, Evaluation evaluation) {
     Project project = getProjectById(idProject);
@@ -149,6 +156,9 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public void saveComment(String idProject, Comment comment){
     Project project = getProjectById(idProject);
+    UserDTO user = userService.getUserByLogin(comment.getUserName());
+    comment.setUserId(user.getId());
+
     List<Comment> comments = project.getComments();
     comments.add(comment);
     project.setComments(comments);

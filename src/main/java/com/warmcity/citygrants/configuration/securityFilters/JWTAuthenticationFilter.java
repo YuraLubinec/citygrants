@@ -54,7 +54,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     res.addHeader(HEADER_AUTH, TOKEN_PREFIX + prepareToken(auth));
     res.addHeader(ACCESS_CONTROL_EXPOSE_HEADERS, HEADER_AUTH);
-    res.setStatus(HttpServletResponse.SC_NO_CONTENT);
   }
 
   @Override
@@ -65,7 +64,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   }
   
   private String prepareToken(Authentication auth) {
-
     Claims claims = Jwts.claims()
         .setSubject(((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername())
         .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME));

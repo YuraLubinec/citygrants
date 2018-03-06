@@ -1,10 +1,15 @@
 package com.warmcity.citygrants.controllers;
 
-import java.util.List;
-
 import com.mongodb.gridfs.GridFSDBFile;
+import com.warmcity.citygrants.dto.UserDTO;
 import com.warmcity.citygrants.gridFSDAO.GridFsDAO;
 import com.warmcity.citygrants.models.Comment;
+import com.warmcity.citygrants.models.FileInfo;
+import com.warmcity.citygrants.models.Project;
+import com.warmcity.citygrants.models.User;
+import com.warmcity.citygrants.services.ProjectService;
+import com.warmcity.citygrants.services.UploadingService;
+import com.warmcity.citygrants.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -24,13 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.warmcity.citygrants.dto.UserDTO;
-import com.warmcity.citygrants.models.FileInfo;
-import com.warmcity.citygrants.models.Project;
-import com.warmcity.citygrants.models.User;
-import com.warmcity.citygrants.services.ProjectService;
-import com.warmcity.citygrants.services.UploadingService;
-import com.warmcity.citygrants.services.UserService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -110,6 +109,7 @@ public class AdminController {
   }
 
   @PutMapping("/project")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateProject(@RequestBody Project project) {
     projectService.updateProject(project);
   }
@@ -122,8 +122,14 @@ public class AdminController {
 
   }
 
+  @PutMapping("/project/{projectId}/approved/{isApproved}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void updateApprovedToSecondStage(@PathVariable String projectId, @PathVariable Boolean isApproved) {
+    projectService.updateApprovedToSecondStage(projectId, isApproved);
+  }
+
   @PostMapping("/project/{projectId}/comment")
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void saveComment(@PathVariable String projectId, @RequestBody Comment comment) {
     projectService.saveComment(projectId, comment);
   }

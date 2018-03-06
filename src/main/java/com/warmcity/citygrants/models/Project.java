@@ -1,15 +1,14 @@
 package com.warmcity.citygrants.models;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.warmcity.citygrants.services.UploadingService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.Data;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Document(collection="projects")
@@ -49,6 +48,7 @@ public class Project implements Serializable {
       this.totalEvalFirstStage += evaluation.getEvalInnovation();
       this.totalEvalFirstStage += evaluation.getEvalIntelligibility();
       this.totalEvalFirstStage += evaluation.getEvalStability();
+      this.totalEvalFirstStage += evaluation.getEvalParticipation();
     });
 
     return this.totalEvalFirstStage;

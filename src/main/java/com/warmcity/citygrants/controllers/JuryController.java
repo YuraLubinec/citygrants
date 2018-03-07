@@ -60,7 +60,7 @@ public class JuryController {
   public ResponseEntity<InputStreamResource> getOneFileById(@PathVariable String fileId) {
     GridFSDBFile imageFile = gridFsService.findOneById(fileId);
 
-    return ResponseEntity.ok().contentType(MediaType.valueOf(imageFile.getContentType()))
+    return ResponseEntity.ok().contentType(MediaType.valueOf(imageFile.getContentType())).header("Content-Disposition", "inline; filename="+ imageFile.getFilename())
         .body(new InputStreamResource(imageFile.getInputStream()));
   }
 }

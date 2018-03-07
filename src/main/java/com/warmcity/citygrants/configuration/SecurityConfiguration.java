@@ -23,6 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   private static final String ANTPATTERNOPTIONS = "/**";
   private static final String[] ANTPATTERNCLIENTPOST = { "/client/project", "/client/project/file" };
+  private static final String[] ANTPATTERNFILEGET = { "/jury/project/file/**", "/admin/project/file/**"};
 
   @Autowired
   private UserDtlsService dtlsService;
@@ -51,6 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     web.ignoring().antMatchers(HttpMethod.OPTIONS, ANTPATTERNOPTIONS);
     web.ignoring().antMatchers(HttpMethod.POST, ANTPATTERNCLIENTPOST);
+    web.ignoring().antMatchers(HttpMethod.GET, ANTPATTERNFILEGET);
   }
 
 }

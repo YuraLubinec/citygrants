@@ -1,8 +1,8 @@
 package com.warmcity.citygrants.dto;
 
-import java.io.Serializable;
-
 import lombok.Data;
+
+import java.io.Serializable;
 
 @Data
 public class UserDTO implements Serializable {
@@ -12,6 +12,7 @@ public class UserDTO implements Serializable {
   private String id;
   private String login;
   private String fullName;
+  private String role;
   
 
 }

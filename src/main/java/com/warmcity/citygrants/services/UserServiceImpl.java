@@ -1,17 +1,16 @@
 package com.warmcity.citygrants.services;
 
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import com.warmcity.citygrants.dto.UserDTO;
+import com.warmcity.citygrants.models.User;
+import com.warmcity.citygrants.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.warmcity.citygrants.dto.UserDTO;
-import com.warmcity.citygrants.models.User;
-import com.warmcity.citygrants.repositories.UserRepository;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -68,6 +67,8 @@ public class UserServiceImpl implements UserService {
     userDTO.setId(user.getId());
     userDTO.setLogin(user.getLogin());
     userDTO.setFullName(user.getFullName());
+    userDTO.setRole(user.getRole().getRole());
+
     return userDTO;
   }
 

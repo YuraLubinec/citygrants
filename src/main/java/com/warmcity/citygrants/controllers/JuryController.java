@@ -32,26 +32,26 @@ public class JuryController {
   @Autowired
   private GridFsDAO gridFsService;
 
-  @GetMapping("/project/{juryLogin}")
+  @GetMapping("/project/{juryId}")
   @ResponseStatus(HttpStatus.OK)
-  public List<ProjectApplJuryDTO> getAllProjects(@PathVariable String juryLogin) {
-    return projectService.getAllJuryProjects(juryLogin);
+  public List<ProjectApplJuryDTO> getAllProjects(@PathVariable String juryId) {
+    return projectService.getAllJuryProjects(juryId);
   }
 
   @PostMapping("/project/{projectId}/evaluation")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ResponseStatus(HttpStatus.OK)
   public void updateEvaluationOfProject(@PathVariable String projectId, @RequestBody Evaluation evaluation) {
     projectService.updateEvaluation(projectId, evaluation);
   }
 
     @PutMapping("/project/{projectId}/interviewEvaluation")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void updateInterviewEvaluationOfProject(@PathVariable String projectId, @RequestBody InterviewEvaluation evaluation) {
         projectService.updateInterviewEvaluation(projectId, evaluation);
     }
 
     @PostMapping("/project/{projectId}/comment")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void saveComment(@PathVariable String projectId, @RequestBody Comment comment) {
         projectService.saveComment(projectId, comment);
     }
@@ -60,7 +60,7 @@ public class JuryController {
   public ResponseEntity<InputStreamResource> getOneFileById(@PathVariable String fileId) {
     GridFSDBFile imageFile = gridFsService.findOneById(fileId);
 
-    return ResponseEntity.ok().contentType(MediaType.valueOf(imageFile.getContentType())).header("Content-Disposition", "inline; filename="+ imageFile.getFilename())
+    return ResponseEntity.ok().contentType(MediaType.valueOf(imageFile.getContentType()))
         .body(new InputStreamResource(imageFile.getInputStream()));
   }
 }

@@ -23,7 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   private static final String ANTPATTERNOPTIONS = "/**";
   private static final String[] ANTPATTERNCLIENTPOST = { "/client/project", "/client/project/file" };
-  private static final String[] ANTPATTERNFILEGET = { "/jury/project/file/**", "/admin/project/file/**"};
+  private static final String[] ANTPATTERNFILEGET = { "/jury/project/file/**", "/admin/project/files/**"};
 
   @Autowired
   private UserDtlsService dtlsService;

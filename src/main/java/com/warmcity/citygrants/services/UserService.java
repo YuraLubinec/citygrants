@@ -12,7 +12,7 @@ public interface UserService {
 
   void createUser(User user);
 
-  void saveUser(User user);
+  void saveUser(UserDTO user);
 
   void deleteUser(String id);
 

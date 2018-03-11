@@ -1,10 +1,12 @@
 package com.warmcity.citygrants.services;
 
 import com.warmcity.citygrants.dto.UserDTO;
+import com.warmcity.citygrants.enums.Roles;
 import com.warmcity.citygrants.models.User;
 import com.warmcity.citygrants.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.AbstractMap;
@@ -20,6 +22,9 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  BCryptPasswordEncoder bCryptPasswordEncoder;
+
   @Override
   public void createUser(User user) {
 
@@ -28,11 +33,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void saveUser(User user) {
+  public void saveUser(UserDTO userDTO) {
 
     // TODO handle how to work when field is empty?
+    User user = convertToUser(userDTO);
     if (userRepository.exists(user.getId())) {
-      userRepository.save(user);
+        userRepository.save(user);
     }
   }
 
@@ -66,10 +72,22 @@ public class UserServiceImpl implements UserService {
     UserDTO userDTO = new UserDTO();
     userDTO.setId(user.getId());
     userDTO.setLogin(user.getLogin());
+    userDTO.setPassword(user.getPassword());
     userDTO.setFullName(user.getFullName());
     userDTO.setRole(user.getRole().getRole());
 
     return userDTO;
+  }
+
+  private User convertToUser(UserDTO userDTO ){
+    User user = new User();
+    user.setId(userDTO.getId());
+    user.setLogin(userDTO.getLogin());
+    user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+    user.setFullName(userDTO.getFullName());
+    user.setRole(userDTO.getRole().equals(Roles.ADMIN.getRole()) ? Roles.ADMIN : Roles.JURYMEMBER);
+
+    return user;
   }
 
   @Override

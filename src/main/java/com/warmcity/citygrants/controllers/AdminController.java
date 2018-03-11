@@ -66,9 +66,9 @@ public class AdminController {
   }
 
   @PutMapping("/user")
-  public void updateUser(@RequestBody @Validated User user) {
+  public void updateUser(@RequestBody @Validated UserDTO userDTO) {
 
-    userService.saveUser(user);
+    userService.saveUser(userDTO);
   }
 
   @DeleteMapping("/user/{id}")

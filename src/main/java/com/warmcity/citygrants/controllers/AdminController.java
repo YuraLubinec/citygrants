@@ -130,7 +130,7 @@ public class AdminController {
 
   @PutMapping("/project")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void updateProject(@RequestBody Project project) {
+  public void updateProject(@RequestBody @Validated Project project) {
   
     projectService.updateProject(project);
   }

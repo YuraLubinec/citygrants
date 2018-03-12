@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.AbstractMap;
 import java.util.List;
@@ -28,7 +29,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public void createUser(UserDTO userDTO) {
 
-    // TODO add encoding
     User user = convertToUser(userDTO);
     userRepository.insert(user);
   }
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     // TODO handle how to work when field is empty?
     User user = convertToUser(userDTO);
     if (userRepository.exists(user.getId())) {
-        userRepository.save(user);
+      userRepository.save(user);
     }
   }
 
@@ -76,18 +76,20 @@ public class UserServiceImpl implements UserService {
     userDTO.setPassword(user.getPassword());
     userDTO.setFullName(user.getFullName());
     userDTO.setRole(user.getRole().getRole());
-
     return userDTO;
   }
 
-  private User convertToUser(UserDTO userDTO ){
+  private User convertToUser(UserDTO userDTO) {
+  
     User user = new User();
-    user.setId(userDTO.getId());
+    String id = userDTO.getId();
+    if (!StringUtils.isEmpty(id)) {
+      user.setId(userDTO.getId());
+    }
     user.setLogin(userDTO.getLogin());
     user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
     user.setFullName(userDTO.getFullName());
     user.setRole(userDTO.getRole().equals(Roles.ADMIN.getRole()) ? Roles.ADMIN : Roles.JURYMEMBER);
-
     return user;
   }
 

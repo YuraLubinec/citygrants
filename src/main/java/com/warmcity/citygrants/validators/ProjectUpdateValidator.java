@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.warmcity.citygrants.dto.ProjectApplicationDTO;
+import com.warmcity.citygrants.models.Project;
 import com.warmcity.citygrants.repositories.ProjectRepository;
 
 @Component
-public class UniqueProjectNameValidator implements Validator {
+public class ProjectUpdateValidator implements Validator {
 
   @Autowired
   private ProjectRepository repository;
@@ -17,14 +17,14 @@ public class UniqueProjectNameValidator implements Validator {
   @Override
   public boolean supports(Class<?> clazz) {
 
-    return ProjectApplicationDTO.class.equals(clazz);
+    return Project.class.equals(clazz);
   }
 
   @Override
   public void validate(Object target, Errors errors) {
 
-    ProjectApplicationDTO dto = (ProjectApplicationDTO) target;
-    if (repository.findOneByDescriptionName(dto.getDescription().getName()) != null) {
+    Project project = (Project) target;
+    if (repository.findOneByDescriptionName(project.getDescription().getName()) != null) {
       errors.rejectValue("description.name", "name.not.unique", "Name not unique");
     }
     ;

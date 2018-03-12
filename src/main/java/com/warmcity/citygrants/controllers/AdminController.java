@@ -1,15 +1,7 @@
 package com.warmcity.citygrants.controllers;
 
-import com.mongodb.gridfs.GridFSDBFile;
-import com.warmcity.citygrants.dto.UserDTO;
-import com.warmcity.citygrants.gridFSDAO.GridFsDAO;
-import com.warmcity.citygrants.models.Comment;
-import com.warmcity.citygrants.models.FileInfo;
-import com.warmcity.citygrants.models.Project;
-import com.warmcity.citygrants.models.User;
-import com.warmcity.citygrants.services.ProjectService;
-import com.warmcity.citygrants.services.UploadingService;
-import com.warmcity.citygrants.services.UserService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -19,8 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,7 +23,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.mongodb.gridfs.GridFSDBFile;
+import com.warmcity.citygrants.dto.UserDTO;
+import com.warmcity.citygrants.gridFSDAO.GridFsDAO;
+import com.warmcity.citygrants.models.Comment;
+import com.warmcity.citygrants.models.FileInfo;
+import com.warmcity.citygrants.models.Project;
+import com.warmcity.citygrants.services.ProjectService;
+import com.warmcity.citygrants.services.UploadingService;
+import com.warmcity.citygrants.services.UserService;
+import com.warmcity.citygrants.validators.ProjectUpdateValidator;
 
 @RestController
 @RequestMapping("/admin")
@@ -46,6 +49,14 @@ public class AdminController {
 
   @Autowired
   private GridFsDAO gridFsService;
+  
+  @Autowired
+  private ProjectUpdateValidator projectUpdateValidator;
+  
+  @InitBinder("project")
+  public void initBinderName(WebDataBinder binder) {
+    binder.addValidators(projectUpdateValidator);
+  }
 
   @GetMapping("/user/{login}")
   public UserDTO getUser(@PathVariable String login) {

@@ -26,9 +26,10 @@ public class UserServiceImpl implements UserService {
   BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Override
-  public void createUser(User user) {
+  public void createUser(UserDTO userDTO) {
 
     // TODO add encoding
+    User user = convertToUser(userDTO);
     userRepository.insert(user);
   }
 

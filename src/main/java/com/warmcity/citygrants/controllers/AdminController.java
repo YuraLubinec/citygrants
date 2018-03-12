@@ -60,9 +60,9 @@ public class AdminController {
   }
 
   @PostMapping("/user")
-  public void addUser(@RequestBody @Validated User user) {
+  public void addUser(@RequestBody @Validated UserDTO userDTO) {
 
-    userService.createUser(user);
+    userService.createUser(userDTO);
   }
 
   @PutMapping("/user")

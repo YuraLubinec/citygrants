@@ -1,16 +1,14 @@
 package com.warmcity.citygrants.services;
 
+import com.warmcity.citygrants.dto.UserDTO;
+import org.springframework.security.core.Authentication;
+
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.springframework.security.core.Authentication;
-
-import com.warmcity.citygrants.dto.UserDTO;
-import com.warmcity.citygrants.models.User;
-
 public interface UserService {
 
-  void createUser(User user);
+  void createUser(UserDTO userDTO);
 
   void saveUser(UserDTO user);
 

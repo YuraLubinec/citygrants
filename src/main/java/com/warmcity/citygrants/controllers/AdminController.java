@@ -33,6 +33,7 @@ import com.warmcity.citygrants.services.ProjectService;
 import com.warmcity.citygrants.services.UploadingService;
 import com.warmcity.citygrants.services.UserService;
 import com.warmcity.citygrants.validators.ProjectUpdateValidator;
+import com.warmcity.citygrants.validators.UserValdiator;
 
 @RestController
 @RequestMapping("/admin")
@@ -49,13 +50,21 @@ public class AdminController {
 
   @Autowired
   private GridFsDAO gridFsService;
-  
+
   @Autowired
   private ProjectUpdateValidator projectUpdateValidator;
-  
+
+  @Autowired
+  private UserValdiator userValdiator;
+
   @InitBinder("project")
   public void initBinderName(WebDataBinder binder) {
     binder.addValidators(projectUpdateValidator);
+  }
+
+  @InitBinder("userDTO")
+  public void initBinderLogin(WebDataBinder binder) {
+    binder.addValidators(userValdiator);
   }
 
   @GetMapping("/user/{login}")
@@ -122,6 +131,7 @@ public class AdminController {
   @PutMapping("/project")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateProject(@RequestBody Project project) {
+  
     projectService.updateProject(project);
   }
 
@@ -136,28 +146,30 @@ public class AdminController {
   @PutMapping("/project/{projectId}/approved/{isApproved}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateApprovedToSecondStage(@PathVariable String projectId, @PathVariable Boolean isApproved) {
+  
     projectService.updateApprovedToSecondStage(projectId, isApproved);
   }
 
   @PostMapping("/project/{projectId}/comment")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void saveComment(@PathVariable String projectId, @RequestBody Comment comment) {
+ 
     projectService.saveComment(projectId, comment);
   }
 
   @DeleteMapping("/project/{projectId}/comment/{commentId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteComment(@PathVariable String projectId, @PathVariable String commentId) {
+  
     projectService.deleteCommentOfProject(projectId, commentId);
   }
 
   @GetMapping("/project/files/{fileId}")
-  public ResponseEntity<InputStreamResource> getOneFileById(@PathVariable String fileId){
+  public ResponseEntity<InputStreamResource> getOneFileById(@PathVariable String fileId) {
+   
     GridFSDBFile imageFile = gridFsService.findOneById(fileId);
-
-    return ResponseEntity.ok()
-            .contentType(MediaType.valueOf(imageFile.getContentType()))
-            .body(new InputStreamResource(imageFile.getInputStream()));
+    return ResponseEntity.ok().contentType(MediaType.valueOf(imageFile.getContentType()))
+        .body(new InputStreamResource(imageFile.getInputStream()));
   }
 
 }

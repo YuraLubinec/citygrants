@@ -25,7 +25,7 @@ public class UniqueProjectNameValidator implements Validator {
 
     ProjectApplicationDTO dto = (ProjectApplicationDTO) target;
     if (repository.findOneByDescriptionName(dto.getDescription().getName()) != null) {
-      errors.rejectValue("description.name", "name.not.unique", "Name not unique");
+      errors.rejectValue("description.name", "project.name.not.unique", "Name not unique");
     }
     ;
 

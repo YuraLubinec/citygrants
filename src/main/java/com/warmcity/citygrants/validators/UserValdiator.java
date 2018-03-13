@@ -27,8 +27,8 @@ public class UserValdiator implements Validator {
 
     UserDTO dto = (UserDTO) target;
     User user = repository.findOneByLogin(dto.getLogin());
-    String id = dto.getId();  
-    Boolean condition = user != null && (!StringUtils.isEmpty(id) && id != user.getId() || StringUtils.isEmpty(id));
+    String id = dto.getId();
+    Boolean condition = user != null && (!StringUtils.isEmpty(id) && !id.equals(user.getId()) || StringUtils.isEmpty(id));
     if (condition) {
       errors.rejectValue("login", "user.login.not.unique", "Such login already existe");
     }

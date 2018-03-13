@@ -25,7 +25,7 @@ public class ProjectUpdateValidator implements Validator {
 
     Project project = (Project) target;
     Project dbProject = repository.findOneByDescriptionName(project.getDescription().getName());
-    if (dbProject != null && project.getId() != dbProject.getId()) {
+    if (dbProject != null && !project.getId().equals(dbProject.getId())) {
       errors.rejectValue("description.name", "project.name.not.unique", "Name not unique");
     }
   }

@@ -1,7 +1,17 @@
 package com.warmcity.citygrants.controllers;
 
-import java.util.List;
-
+import com.mongodb.gridfs.GridFSDBFile;
+import com.warmcity.citygrants.dto.UserDTO;
+import com.warmcity.citygrants.gridFSDAO.GridFsDAO;
+import com.warmcity.citygrants.models.Comment;
+import com.warmcity.citygrants.models.FileInfo;
+import com.warmcity.citygrants.models.Project;
+import com.warmcity.citygrants.models.User;
+import com.warmcity.citygrants.services.ProjectService;
+import com.warmcity.citygrants.services.UploadingService;
+import com.warmcity.citygrants.services.UserService;
+import com.warmcity.citygrants.validators.ProjectUpdateValidator;
+import com.warmcity.citygrants.validators.UserValdiator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -23,17 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mongodb.gridfs.GridFSDBFile;
-import com.warmcity.citygrants.dto.UserDTO;
-import com.warmcity.citygrants.gridFSDAO.GridFsDAO;
-import com.warmcity.citygrants.models.Comment;
-import com.warmcity.citygrants.models.FileInfo;
-import com.warmcity.citygrants.models.Project;
-import com.warmcity.citygrants.services.ProjectService;
-import com.warmcity.citygrants.services.UploadingService;
-import com.warmcity.citygrants.services.UserService;
-import com.warmcity.citygrants.validators.ProjectUpdateValidator;
-import com.warmcity.citygrants.validators.UserValdiator;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -80,9 +80,8 @@ public class AdminController {
   }
 
   @PostMapping("/user")
-  public void addUser(@RequestBody @Validated UserDTO userDTO) {
-
-    userService.createUser(userDTO);
+  public User addUser(@RequestBody @Validated UserDTO userDTO) {
+    return userService.createUser(userDTO);
   }
 
   @PutMapping("/user")

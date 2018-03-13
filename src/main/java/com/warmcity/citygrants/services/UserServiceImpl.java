@@ -1,19 +1,18 @@
 package com.warmcity.citygrants.services;
 
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import com.warmcity.citygrants.dto.UserDTO;
+import com.warmcity.citygrants.enums.Roles;
+import com.warmcity.citygrants.models.User;
+import com.warmcity.citygrants.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.warmcity.citygrants.dto.UserDTO;
-import com.warmcity.citygrants.enums.Roles;
-import com.warmcity.citygrants.models.User;
-import com.warmcity.citygrants.repositories.UserRepository;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,9 +26,9 @@ public class UserServiceImpl implements UserService {
   BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Override
-  public void createUser(UserDTO userDTO) {
+  public User createUser(UserDTO userDTO) {
+    return userRepository.insert(prepareNewUser(userDTO));
 
-    userRepository.insert(prepareNewUser(userDTO));
   }
 
   @Override

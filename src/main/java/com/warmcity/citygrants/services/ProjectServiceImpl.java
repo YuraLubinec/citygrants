@@ -47,6 +47,14 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
+  public boolean isUnigNameProject(String name){
+    Project project = null;
+    project = projectRepository.findOneByDescriptionName(name);
+
+    return project == null;
+  }
+
+  @Override
   public List<Project> getAllProjects() {
     List<Project> projects = projectRepository.findAll();
     projects.forEach(project -> project.setFilesInfo(uploadingService.getAllFilesInfoForProject(project.getId())));
@@ -111,11 +119,10 @@ public class ProjectServiceImpl implements ProjectService {
     projectRepository.save(project);
   }
 
-  @Override
-
   /*
-   * TODO It is temporary method, it need refactoring, probably here need will write query for updating evaluation
-   */
+ * TODO It is temporary method, it need refactoring, probably here need will write query for updating evaluation
+ */
+  @Override
   public void updateEvaluation(String idProject, Evaluation evaluation) {
     Project project = getProjectById(idProject);
     UserDTO userDTO = userService.getUserByLogin(evaluation.getJuryMemberName());

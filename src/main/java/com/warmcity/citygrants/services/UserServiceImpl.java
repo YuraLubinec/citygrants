@@ -1,19 +1,19 @@
 package com.warmcity.citygrants.services;
 
-import com.warmcity.citygrants.dto.UserDTO;
-import com.warmcity.citygrants.enums.Roles;
-import com.warmcity.citygrants.models.User;
-import com.warmcity.citygrants.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.warmcity.citygrants.dto.UserDTO;
+import com.warmcity.citygrants.enums.Roles;
+import com.warmcity.citygrants.models.User;
+import com.warmcity.citygrants.repositories.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,17 +29,16 @@ public class UserServiceImpl implements UserService {
   @Override
   public void createUser(UserDTO userDTO) {
 
-    User user = convertToUser(userDTO);
-    userRepository.insert(user);
+    userRepository.insert(prepareNewUser(userDTO));
   }
 
   @Override
   public void saveUser(UserDTO userDTO) {
 
-    // TODO handle how to work when field is empty?
-    User user = convertToUser(userDTO);
-    if (userRepository.exists(user.getId())) {
-      userRepository.save(user);
+    User dbUser = userRepository.findOne(userDTO.getId());
+    if (dbUser != null) {
+      updateExistingUserInfo(userDTO, dbUser);
+      userRepository.save(dbUser);
     }
   }
 
@@ -68,36 +67,42 @@ public class UserServiceImpl implements UserService {
 
   }
 
-  private UserDTO convertToUserDTO(User user) {
-
-    UserDTO userDTO = new UserDTO();
-    userDTO.setId(user.getId());
-    userDTO.setLogin(user.getLogin());
-    userDTO.setPassword(user.getPassword());
-    userDTO.setFullName(user.getFullName());
-    userDTO.setRole(user.getRole().getRole());
-    return userDTO;
-  }
-
-  private User convertToUser(UserDTO userDTO) {
-  
-    User user = new User();
-    String id = userDTO.getId();
-    if (!StringUtils.isEmpty(id)) {
-      user.setId(userDTO.getId());
-    }
-    user.setLogin(userDTO.getLogin());
-    user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-    user.setFullName(userDTO.getFullName());
-    user.setRole(userDTO.getRole().equals(Roles.ADMIN.getRole()) ? Roles.ADMIN : Roles.JURYMEMBER);
-    return user;
-  }
-
   @Override
   public Map.Entry<String, String> getAuthority(Authentication authentication) {
 
     return new AbstractMap.SimpleEntry<String, String>(ROLE,
         authentication.getAuthorities().stream().findFirst().get().getAuthority());
+  }
+
+  private UserDTO convertToUserDTO(User user) {
+
+    UserDTO userDTO = new UserDTO();
+    userDTO.setId(user.getId());
+    userDTO.setLogin(user.getLogin());
+    userDTO.setFullName(user.getFullName());
+    userDTO.setRole(user.getRole().getRole());
+    return userDTO;
+  }
+
+  private User prepareNewUser(UserDTO userDTO) {
+
+    User user = new User();
+    user.setLogin(userDTO.getLogin());
+    user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+    user.setFullName(userDTO.getFullName());
+    user.setRole(Roles.valueOf(userDTO.getRole()));
+    return user;
+  }
+
+  private void updateExistingUserInfo(UserDTO dto, User existingUser) {
+
+    String password = dto.getPassword();
+    existingUser.setLogin(dto.getLogin());
+    existingUser.setFullName(dto.getFullName());
+    existingUser.setRole(Roles.valueOf(dto.getRole()));
+    if (!password.isEmpty()) {
+      existingUser.setPassword(bCryptPasswordEncoder.encode(password));
+    }
   }
 
 }

@@ -2,6 +2,8 @@ package com.warmcity.citygrants.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
@@ -14,7 +16,7 @@ public class UserDTO implements Serializable {
   private String id;
   @NotBlank
   private String login;
-  @NotBlank
+  @NotNull
   private String password;
   @NotBlank
   private String fullName;

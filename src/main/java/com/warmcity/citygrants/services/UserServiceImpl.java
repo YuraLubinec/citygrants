@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-  private static final String ROLE = "role";
+  public static final String ROLE = "role";
 
   @Autowired
   private UserRepository userRepository;
 
   @Autowired
-  BCryptPasswordEncoder bCryptPasswordEncoder;
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Override
   public User createUser(UserDTO userDTO) {
@@ -36,8 +36,7 @@ public class UserServiceImpl implements UserService {
 
     User dbUser = userRepository.findOne(userDTO.getId());
     if (dbUser != null) {
-      updateExistingUserInfo(userDTO, dbUser);
-      userRepository.save(dbUser);
+      userRepository.save(getUpdatedUser(userDTO, dbUser.getId(), dbUser.getPassword()));
     }
   }
 
@@ -93,15 +92,20 @@ public class UserServiceImpl implements UserService {
     return user;
   }
 
-  private void updateExistingUserInfo(UserDTO dto, User existingUser) {
+  private User getUpdatedUser(UserDTO dto, String id, String oldPassword) {
 
-    String password = dto.getPassword();
-    existingUser.setLogin(dto.getLogin());
-    existingUser.setFullName(dto.getFullName());
-    existingUser.setRole(Roles.valueOf(dto.getRole()));
-    if (!password.isEmpty()) {
-      existingUser.setPassword(bCryptPasswordEncoder.encode(password));
+    String newPassword = dto.getPassword();
+    User updatedUser = new User();
+    updatedUser.setId(id);
+    updatedUser.setLogin(dto.getLogin());
+    updatedUser.setFullName(dto.getFullName());
+    updatedUser.setRole(Roles.valueOf(dto.getRole()));
+    if (!newPassword.isEmpty()) {
+      updatedUser.setPassword(bCryptPasswordEncoder.encode(newPassword));
+    } else {
+      updatedUser.setPassword(oldPassword);
     }
+    return updatedUser;
   }
 
 }

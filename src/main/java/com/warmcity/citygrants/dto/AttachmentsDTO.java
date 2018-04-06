@@ -2,6 +2,7 @@ package com.warmcity.citygrants.dto;
 
 import java.io.Serializable;
 import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 

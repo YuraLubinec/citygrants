@@ -23,7 +23,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.Authentication;
@@ -70,7 +69,7 @@ public class UserServiceTest {
     user.setRole(Roles.ADMIN);
 
     userServiceImpl.createUser(userDTO);
-    verify(userRepository, Mockito.times(1)).insert(captor.capture());
+    verify(userRepository, times(1)).insert(captor.capture());
 
     assertEquals(captor.getValue().getLogin(), user.getLogin());
     assertEquals(captor.getValue().getFullName(), user.getFullName());

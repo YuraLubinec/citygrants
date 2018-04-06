@@ -23,10 +23,26 @@ public class UploadingServiceImpl implements UploadingService {
   private GridFsDAOimpl gridFsDAOimpl;
 
   @Override
+  @SneakyThrows
   public void uploadFilesToDb(AttachmentsDTO attachments) {
+    
+    String id = attachments.getId();
+    List<MultipartFile> images = attachments.getImages();
+    List<MultipartFile> pdfDocuments = attachments.getPdfDocs();
 
-    saveImages(attachments.getImages(), attachments.getId());
-    savePdfDocuments(attachments.getPdfDocs(), attachments.getId());
+    if (images != null && !images.isEmpty()) {
+      for (MultipartFile image : images) {
+        gridFsDAOimpl.saveFile(image.getInputStream(), image.getOriginalFilename(), image.getContentType(), id);
+      }
+    }
+    
+    if (pdfDocuments != null && !pdfDocuments.isEmpty()) {
+      for (MultipartFile pdfDocument : pdfDocuments) {
+        gridFsDAOimpl.saveFile(pdfDocument.getInputStream(), pdfDocument.getOriginalFilename(),
+            pdfDocument.getContentType(), id);
+      }
+    }
+
   }
 
   @Override
@@ -43,25 +59,26 @@ public class UploadingServiceImpl implements UploadingService {
     return file != null ? new GridFsResource(file) : null;
   }
 
-  @SneakyThrows
-  private void saveImages(List<MultipartFile> images, String id) {
+//  @SneakyThrows
+//  private void saveImages(List<MultipartFile> images, String id) {
+//
+//    if (images != null && !images.isEmpty()) {
+//      for (MultipartFile image : images) {
+//        gridFsDAOimpl.saveFile(image.getInputStream(), image.getOriginalFilename(), image.getContentType(), id);
+//      }
+//    }
+//  }
 
-    if (images != null && !images.isEmpty()) {
-      for (MultipartFile image : images) {
-        gridFsDAOimpl.saveFile(image.getInputStream(), image.getOriginalFilename(), image.getContentType(), id);
-      }
-    }
-  }
-
-  @SneakyThrows
-  private void savePdfDocuments(List<MultipartFile> pdfDocuments, String id) {
-
-    if (pdfDocuments != null && !pdfDocuments.isEmpty()) {
-      for (MultipartFile pdfDocument : pdfDocuments) {
-        gridFsDAOimpl.saveFile(pdfDocument.getInputStream(), pdfDocument.getOriginalFilename(),
-            pdfDocument.getContentType(), id);
-      }
-    }
-  }
+//  @SneakyThrows
+//  private void savePdfDocuments(List<MultipartFile> pdfDocuments, String id) {
+//
+//    if (pdfDocuments != null && !pdfDocuments.isEmpty()) {
+//      for (MultipartFile pdfDocument : pdfDocuments) {
+//        gridFsDAOimpl.saveFile(pdfDocument.getInputStream(), pdfDocument.getOriginalFilename(),
+//            pdfDocument.getContentType(), id);
+//      }
+//    }
+//  }
+  
 
 }

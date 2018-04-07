@@ -47,26 +47,26 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public boolean isUnigNameProject(String name){
-    Project project = null;
-    project = projectRepository.findOneByDescriptionName(name);
+  public boolean isUniqueNameProject(String name) {
 
-    return project == null;
+    return projectRepository.findOneByDescriptionName(name) == null;
   }
 
   @Override
   public List<Project> getAllProjects() {
+
     List<Project> projects = projectRepository.findAll();
     projects.forEach(project -> project.setFilesInfo(uploadingService.getAllFilesInfoForProject(project.getId())));
-
     return projects;
   }
 
   @Override
-  public List<ProjectApplJuryDTO> getAllJuryProjects(String juryLogin){
+  public List<ProjectApplJuryDTO> getAllJuryProjects(String juryLogin) {
     List<Project> listProjects = getAllProjects();
-    List<ProjectApplJuryDTO>listProjectJury = new ArrayList<>();
-    listProjects.forEach(project -> { listProjectJury.add(getProjectsForJury(project,juryLogin));});
+    List<ProjectApplJuryDTO> listProjectJury = new ArrayList<>();
+    listProjects.forEach(project -> {
+      listProjectJury.add(getProjectsForJury(project, juryLogin));
+    });
 
     return listProjectJury;
   }
@@ -78,8 +78,8 @@ public class ProjectServiceImpl implements ProjectService {
     projectDTO.setBudget(project.getBudget());
     projectDTO.setComments(project.getComments());
     projectDTO.setConfirmed(project.isConfirmed());
-    projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(),juryLogin));
-    projectDTO.setInterviewEvaluation(getInterviewEvalutionForJury(project.getInterviewEvaluations(),juryLogin));
+    projectDTO.setEvaluation(getEvalutionForJury(project.getEvaluations(), juryLogin));
+    projectDTO.setInterviewEvaluation(getInterviewEvalutionForJury(project.getInterviewEvaluations(), juryLogin));
     projectDTO.setFilesInfo(project.getFilesInfo());
     projectDTO.setApprovedToSecondStage(project.isApprovedToSecondStage());
 
@@ -91,20 +91,21 @@ public class ProjectServiceImpl implements ProjectService {
         .orElseGet(() -> getDefaultEvalution(juryLogin));
   }
 
-  private InterviewEvaluation getInterviewEvalutionForJury(List<InterviewEvaluation> evaluations, String juryLogin){
-    return evaluations.stream().filter(eval -> eval.getJuryMemberName().equals(juryLogin)).findFirst().orElseGet(()->getDefaultInterviewEvalution(juryLogin));
+  private InterviewEvaluation getInterviewEvalutionForJury(List<InterviewEvaluation> evaluations, String juryLogin) {
+    return evaluations.stream().filter(eval -> eval.getJuryMemberName().equals(juryLogin)).findFirst()
+        .orElseGet(() -> getDefaultInterviewEvalution(juryLogin));
   }
 
-  private Evaluation getDefaultEvalution(String juryLogin){
+  private Evaluation getDefaultEvalution(String juryLogin) {
 
     UserDTO user = userService.getUserByLogin(juryLogin);
 
-    return  new Evaluation(user.getId(),juryLogin,0,0,0,0,0,0,0,0);
+    return new Evaluation(user.getId(), juryLogin, 0, 0, 0, 0, 0, 0, 0, 0);
   }
-  private InterviewEvaluation getDefaultInterviewEvalution(String juryLogin){
+  private InterviewEvaluation getDefaultInterviewEvalution(String juryLogin) {
     UserDTO user = userService.getUserByLogin(juryLogin);
 
-    return  new InterviewEvaluation(user.getId(),juryLogin,0);
+    return new InterviewEvaluation(user.getId(), juryLogin, 0);
   }
 
   @Override
@@ -120,11 +121,12 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   /*
- * TODO It is temporary method, it need refactoring, probably here need will write query for updating evaluation
- */
+   * TODO It is temporary method, it need refactoring, probably here need will
+   * write query for updating evaluation
+   */
   @Override
   public void updateEvaluation(String idProject, Evaluation evaluation) {
-    Project project = getProjectById(idProject);
+    Project project = projectRepository.findOne(idProject);
     UserDTO userDTO = userService.getUserByLogin(evaluation.getJuryMemberName());
     evaluation.setJuryMemberId(userDTO.getId());
 
@@ -144,20 +146,20 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public void updateInterviewEvaluation(String idProject, InterviewEvaluation evaluation){
-    Project project = getProjectById(idProject);
+  public void updateInterviewEvaluation(String idProject, InterviewEvaluation evaluation) {
+    Project project = projectRepository.findOne(idProject);
     UserDTO userDTO = userService.getUserByLogin(evaluation.getJuryMemberName());
     evaluation.setJuryMemberId(userDTO.getId());
 
     int equalName = 0;
-    for (int index = 0; index < project.getInterviewEvaluations().size(); index++){
-      if(project.getInterviewEvaluations().get(index).getJuryMemberName().equals(evaluation.getJuryMemberName())){
+    for (int index = 0; index < project.getInterviewEvaluations().size(); index++) {
+      if (project.getInterviewEvaluations().get(index).getJuryMemberName().equals(evaluation.getJuryMemberName())) {
         ++equalName;
         project.getInterviewEvaluations().set(index, evaluation);
         break;
       }
     }
-    if(equalName == 0){
+    if (equalName == 0) {
       project.getInterviewEvaluations().add(evaluation);
     }
 
@@ -166,15 +168,15 @@ public class ProjectServiceImpl implements ProjectService {
 
   @Override
   public void updateApprovedToSecondStage(String idProject, Boolean isApproved) {
-    Project project = getProjectById(idProject);
+    Project project = projectRepository.findOne(idProject);
     project.setApprovedToSecondStage(isApproved);
 
     updateProject(project);
   }
 
   @Override
-  public void saveComment(String idProject, Comment comment){
-    Project project = getProjectById(idProject);
+  public void saveComment(String idProject, Comment comment) {
+    Project project = projectRepository.findOne(idProject);
     UserDTO user = userService.getUserByLogin(comment.getUserName());
     comment.setUserId(user.getId());
 
@@ -193,13 +195,12 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   @Override
-  public void deleteCommentOfProject(String idProject, String idComment){
-    Project project = getProjectById(idProject);
+  public void deleteCommentOfProject(String idProject, String idComment) {
+    Project project = projectRepository.findOne(idProject);
     List<Comment> comments = project.getComments();
-    comments.stream()
-            .filter(comment -> comment.getId().equals(idComment))
-            .findFirst()
-            .ifPresent(comment -> {comments.remove(comment);});
+    comments.stream().filter(comment -> comment.getId().equals(idComment)).findFirst().ifPresent(comment -> {
+      comments.remove(comment);
+    });
 
     updateProject(project);
   }

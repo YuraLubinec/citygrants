@@ -61,7 +61,7 @@ public class ClientPageController {
 
   @GetMapping("/project/isUniqName/{projectName}")
   public boolean isUniqNameProject(@PathVariable String projectName){
-    return projectService.isUnigNameProject(projectName);
+    return projectService.isUniqueNameProject(projectName);
   }
 
   @PostMapping(path = "/project/file")

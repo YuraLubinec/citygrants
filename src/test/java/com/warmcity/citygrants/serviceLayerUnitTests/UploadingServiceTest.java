@@ -119,9 +119,4 @@ public class UploadingServiceTest {
     assertEquals(uploadingServiceImpl.getAllFilesInfoForProject(anyString()), new ArrayList<FileInfo>());
   }
 
-  @Test
-  public void getFileByIdTest() {
-    // TODO implement test
-  }
-
 }

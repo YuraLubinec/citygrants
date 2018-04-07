@@ -33,6 +33,6 @@ public interface ProjectService {
 
   void saveComment(String idProject, Comment comment);
 
-  boolean isUnigNameProject(String name);
+  boolean isUniqueNameProject(String name);
 
 }

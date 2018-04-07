@@ -182,7 +182,7 @@ public class UserServiceTest {
   @Test
   public void getAuthorityTest() {
 
-    //use list just to keep order
+    // use list just to keep order
     List<? extends GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(Roles.ADMIN.toString()),
         new SimpleGrantedAuthority(Roles.JURYMEMBER.toString()));
 

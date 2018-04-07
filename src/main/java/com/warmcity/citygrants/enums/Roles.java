@@ -2,7 +2,7 @@ package com.warmcity.citygrants.enums;
 
 public enum Roles {
   
-  ADMIN("адміністратор"), JURYMEMBER("оператор");
+  ADMIN("адміністратор"), JURYMEMBER("член жюрі");
   
   private String role;
   

@@ -59,6 +59,7 @@ public class ClientPageController {
 
   }
 
+  //TODO it returns string not JSON, how do you parse it?
   @GetMapping("/project/isUniqName/{projectName}")
   public boolean isUniqNameProject(@PathVariable String projectName){
     return projectService.isUniqueNameProject(projectName);

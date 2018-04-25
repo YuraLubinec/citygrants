@@ -29,7 +29,7 @@ public class AttachmentsValidator implements Validator {
       for (MultipartFile image : images) {
         String contentType = image.getContentType();
         if (!(contentType.equals(MediaType.IMAGE_JPEG_VALUE) || contentType.equals(MediaType.IMAGE_PNG_VALUE))) {
-          errors.rejectValue("images", null, "Not right format, should be jpeg or png");
+          errors.rejectValue("images", "not.valid.data.type", "Not right format, should be jpeg or png");
           break;
         }
       }
@@ -38,7 +38,7 @@ public class AttachmentsValidator implements Validator {
       for (MultipartFile pdf : pdfs) {
         String contentType = pdf.getContentType();
         if (!contentType.equals(MediaType.APPLICATION_PDF_VALUE)) {
-          errors.rejectValue("images", null, "Not right format, should be PDF");
+          errors.rejectValue("images", "not.valid.data.type", "Not right format, should be PDF");
         }
       }
     }

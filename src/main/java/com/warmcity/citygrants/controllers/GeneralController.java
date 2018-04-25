@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,6 +42,15 @@ public class GeneralController {
         messageSource.getMessage(error.getCode(), null, FALLBACKOPTION, null));
     return new ResponseEntity<Map.Entry<String, String>>(errorEntry, HttpStatus.BAD_REQUEST);
   }
+  
+  @ExceptionHandler(BindException.class)
+  public ResponseEntity<Map.Entry<String, String>> validationErrorHandler(BindException ex) {
+
+    FieldError error = ex.getBindingResult().getFieldErrors().get(FIRST_FIELD_NOT_PASSED_VALIDATION);
+    Map.Entry<String, String> errorEntry = new AbstractMap.SimpleEntry<String, String>(ERRORMESSAGEKEY,
+        messageSource.getMessage(error.getCode(), null, FALLBACKOPTION, null));
+    return new ResponseEntity<Map.Entry<String, String>>(errorEntry, HttpStatus.BAD_REQUEST);
+  } 
 
   @ExceptionHandler(MultipartException.class)
   public ResponseEntity<Map.Entry<String, String>> exceededSizeErrorHandler(MultipartException ex) {

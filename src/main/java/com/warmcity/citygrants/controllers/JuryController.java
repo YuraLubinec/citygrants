@@ -44,17 +44,18 @@ public class JuryController {
     projectService.updateEvaluation(projectId, evaluation);
   }
 
-    @PutMapping("/project/{projectId}/interviewEvaluation")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateInterviewEvaluationOfProject(@PathVariable String projectId, @RequestBody InterviewEvaluation evaluation) {
-        projectService.updateInterviewEvaluation(projectId, evaluation);
-    }
+  @PutMapping("/project/{projectId}/interviewEvaluation")
+  @ResponseStatus(HttpStatus.OK)
+  public void updateInterviewEvaluationOfProject(@PathVariable String projectId,
+      @RequestBody InterviewEvaluation evaluation) {
+    projectService.updateInterviewEvaluation(projectId, evaluation);
+  }
 
-    @PostMapping("/project/{projectId}/comment")
-    @ResponseStatus(HttpStatus.OK)
-    public void saveComment(@PathVariable String projectId, @RequestBody Comment comment) {
-        projectService.saveComment(projectId, comment);
-    }
+  @PostMapping("/project/{projectId}/comment")
+  @ResponseStatus(HttpStatus.OK)
+  public void saveComment(@PathVariable String projectId, @RequestBody Comment comment) {
+    projectService.saveComment(projectId, comment);
+  }
 
   @GetMapping("/project/file/{fileId}")
   public ResponseEntity<InputStreamResource> getOneFileById(@PathVariable String fileId) {

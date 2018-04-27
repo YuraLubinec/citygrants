@@ -18,7 +18,7 @@ public class AuthorizationController {
   private UserService userService;
 
   @GetMapping("/authority")
-  public ResponseEntity<Map.Entry<String, String>> saveProject(Authentication authentication) {
+  public ResponseEntity<Map.Entry<String, String>> getAuthority(Authentication authentication) {
 
     return new ResponseEntity<Map.Entry<String, String>>(userService.getAuthority(authentication), HttpStatus.OK);
 

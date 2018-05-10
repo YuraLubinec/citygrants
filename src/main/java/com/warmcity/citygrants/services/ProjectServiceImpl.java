@@ -134,6 +134,7 @@ public class ProjectServiceImpl implements ProjectService {
     for (int index = 0; index < project.getEvaluations().size(); index++) {
       if (project.getEvaluations().get(index).getJuryMemberName().equals(evaluation.getJuryMemberName())) {
         ++equalId;
+        evaluation.setJuryMemberName(userDTO.getFullName());
         project.getEvaluations().set(index, evaluation);
         break;
       }
@@ -179,6 +180,7 @@ public class ProjectServiceImpl implements ProjectService {
     Project project = projectRepository.findOne(idProject);
     UserDTO user = userService.getUserByLogin(comment.getUserName());
     comment.setUserId(user.getId());
+    comment.setUserName(user.getFullName());
 
     List<Comment> comments = project.getComments();
     comments.add(comment);

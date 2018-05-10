@@ -2,11 +2,13 @@ package com.warmcity.citygrants.controllers;
 
 import com.mongodb.gridfs.GridFSDBFile;
 import com.warmcity.citygrants.dto.ProjectApplJuryDTO;
+import com.warmcity.citygrants.dto.UserDTO;
 import com.warmcity.citygrants.gridFSDAO.GridFsDAO;
 import com.warmcity.citygrants.models.Comment;
 import com.warmcity.citygrants.models.Evaluation;
 import com.warmcity.citygrants.models.InterviewEvaluation;
 import com.warmcity.citygrants.services.ProjectService;
+import com.warmcity.citygrants.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -31,11 +33,19 @@ public class JuryController {
   private ProjectService projectService;
   @Autowired
   private GridFsDAO gridFsService;
+  @Autowired
+  private UserService userService;
 
   @GetMapping("/project/{juryId}")
   @ResponseStatus(HttpStatus.OK)
   public List<ProjectApplJuryDTO> getAllProjects(@PathVariable String juryId) {
     return projectService.getAllJuryProjects(juryId);
+  }
+
+  @GetMapping("/project/user/{login}")
+  @ResponseStatus(HttpStatus.OK)
+  public UserDTO getUserByLogin(@PathVariable String login) {
+    return userService.getUserByLogin(login);
   }
 
   @PostMapping("/project/{projectId}/evaluation")

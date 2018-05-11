@@ -87,7 +87,7 @@ public class ProjectServiceImpl implements ProjectService {
   }
 
   private Evaluation getEvalutionForJury(List<Evaluation> evaluations, String juryLogin) {
-    return evaluations.stream().filter(eval -> eval.getJuryMemberName().equals(juryLogin)).findFirst()
+    return evaluations.stream().filter(eval -> eval.getJuryMemberLogin().equals(juryLogin)).findFirst()
         .orElseGet(() -> getDefaultEvalution(juryLogin));
   }
 
@@ -100,7 +100,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     UserDTO user = userService.getUserByLogin(juryLogin);
 
-    return new Evaluation(user.getId(), juryLogin, 0, 0, 0, 0, 0, 0, 0, 0);
+    return new Evaluation(user.getId(), juryLogin, user.getFullName(), 0, 0, 0, 0, 0, 0, 0, 0);
   }
   private InterviewEvaluation getDefaultInterviewEvalution(String juryLogin) {
     UserDTO user = userService.getUserByLogin(juryLogin);
@@ -127,14 +127,13 @@ public class ProjectServiceImpl implements ProjectService {
   @Override
   public void updateEvaluation(String idProject, Evaluation evaluation) {
     Project project = projectRepository.findOne(idProject);
-    UserDTO userDTO = userService.getUserByLogin(evaluation.getJuryMemberName());
+    UserDTO userDTO = userService.getUserByLogin(evaluation.getJuryMemberLogin());
     evaluation.setJuryMemberId(userDTO.getId());
 
     int equalId = 0;
     for (int index = 0; index < project.getEvaluations().size(); index++) {
-      if (project.getEvaluations().get(index).getJuryMemberName().equals(evaluation.getJuryMemberName())) {
+      if (project.getEvaluations().get(index).getJuryMemberLogin().equals(evaluation.getJuryMemberLogin())) {
         ++equalId;
-        evaluation.setJuryMemberName(userDTO.getFullName());
         project.getEvaluations().set(index, evaluation);
         break;
       }

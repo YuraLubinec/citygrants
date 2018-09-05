@@ -41,11 +41,13 @@ public class ClientPageController {
 
   @InitBinder("projectApplicationDTO")
   public void initBinderName(WebDataBinder binder) {
+
     binder.addValidators(nameValidator);
   }
 
   @InitBinder("attachmentsDTO")
   public void initBinderAttachments(WebDataBinder binder) {
+
     binder.addValidators(attachmentsValidator);
   }
 
@@ -59,9 +61,10 @@ public class ClientPageController {
 
   }
 
-  //TODO it returns string not JSON, how do you parse it?
+  // TODO it returns string not JSON, how do you parse it?
   @GetMapping("/project/isUniqName/{projectName}")
-  public boolean isUniqNameProject(@PathVariable String projectName){
+  public boolean isUniqNameProject(@PathVariable String projectName) {
+
     return projectService.isUniqueNameProject(projectName);
   }
 

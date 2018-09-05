@@ -64,6 +64,7 @@ public class AdminController {
 
   @InitBinder("userDTO")
   public void initBinderLogin(WebDataBinder binder) {
+    
     binder.addValidators(userValdiator);
   }
 
@@ -81,6 +82,7 @@ public class AdminController {
 
   @PostMapping("/user")
   public User addUser(@RequestBody @Validated UserDTO userDTO) {
+    
     return userService.createUser(userDTO);
   }
 
